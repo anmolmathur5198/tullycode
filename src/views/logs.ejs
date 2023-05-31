@@ -1,0 +1,214 @@
+<%- include('header') %>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"
+        defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+    <div class="page-wrapper">
+        <div class="container-fluid">
+            <div class="row page-titles">
+                <div class="col-md-5 align-self-center">
+                    <h4 class="text-themecolor">Manage Logs</h4>
+                </div>
+                <div class="col-md-7 align-self-center text-right">
+                    <div class="d-flex justify-content-end align-items-center">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a
+                                    onclick="location.href='/appdashboard'+location.search">Dashboard</a></li>
+                            <li class="breadcrumb-item active">Manage Logs</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- column -->
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Logs Table</h4>
+
+
+                            <div class="row">
+                                <div class="col-lg-2">
+                                    <div class="form-group">
+                                        <label for="typeFilter">Type</label>
+                                        <select class="form-control" id="typeFilter">
+                                            <option value="">All</option>
+                                            <option value="User login">User login</option>
+                                            <option value="deepak">deepak</option>
+                                            <option value="User login successfully">User login successfully</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2">
+                                    <div class="form-group">
+                                        <label for="statusFilter">Status</label>
+                                        <select class="form-control" id="statusFilter">
+                                            <option value="">All</option>
+                                            <option value="Success">Success</option>
+                                            <option value="Error">Error</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2">
+                                    <div class="form-group">
+                                        <label for="fromFilter">From</label>
+                                        <select class="form-control" id="fromFilter">
+                                            <option value="">All</option>
+                                            <option value="Myenergi">Myenergi</option>
+                                            <option value="HubSpot">HubSpot</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2">
+                                    <div class="form-group">
+                                        <label for="Date">Date Search</label>
+                                        <input class="form-control" value="" type="text" name="daterange" id="date2" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table" id="logTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Sr No</th>
+                                            <th>Type</th>
+                                            <th>Status</th>
+                                            <th>Message</th>
+                                            <th>From</th>
+                                            <th>Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <% logdata.forEach(function(data,i) { %>
+
+                                            <tr>
+                                                <td>
+                                                    <%= i + 1 %>
+                                                </td>
+                                                <td>
+                                                    <%= data.type %>
+                                                </td>
+                                                <td>
+                                                    <% if (data.status==='Success' ) { %>
+                                                        <span class="label label-success">Success</span>
+                                                        <% } else { %>
+                                                            <span class="label label-danger">Error</span>
+                                                            <% } %>
+                                                </td>
+                                                <td>
+                                                    <%= data.message %>
+                                                </td>
+                                                <td>
+                                                    <%= data.from %>
+                                                </td>
+                                                <td>
+                                                    <%= new Date(data.createdAt).toLocaleString('en-US', {
+                                                        year: 'numeric' , month: '2-digit' , day: '2-digit' ,
+                                                        hour: 'numeric' , minute: 'numeric' , second: 'numeric' ,
+                                                        hour12: true }) %>
+                                                </td>
+                                            </tr>
+
+                                            <% }); %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <%- include('footer') %>
+       
+        <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+        <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script> -->
+        <script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
+
+        <script>
+            $(document).ready(function () {
+                $('#logTable').DataTable();
+                
+            });
+
+        </script>
+
+        <script>
+            $(document).ready(function () {
+                $('#date2').on('input change', function () {
+                    console.log("typeVal");
+                    let typeVal = $('#date2').val().toLowerCase().trim();
+                    console.log("typeVal", typeVal);
+                    $.ajax({
+                        url: "/logsdata",
+                        type: "POST",
+                        data: {
+                            typeVal
+                        },
+                        dataType: 'json',
+                        success: function (result) {
+                            console.log("dfdsfd", result);
+
+                            // Remove table body
+                            $("#logTable").find("tr:gt(0)").remove();
+                            result.forEach((item, i) => {
+                                const row = $('<tr>');
+                                row.append($('<td>').text(i + 1));
+                                row.append($('<td>').text(item.type));
+                                row.append($('<td>').text(item.status));
+                                row.append($('<td>').text(item.message));
+                                row.append($('<td>').text(item.from));
+                                row.append($('<td>').text(moment(item.createdAt).format('MM/DD/YYYY HH:mm:ss')));
+                                $('#logTable tbody').append(row);
+                                
+                            });
+                        }
+                    });
+                });
+            });
+        </script>
+        <script>
+            // get the table rows and convert them into an array
+            $(document).ready(function () {
+
+                // Listen for changes in the Type and Status filter fields
+                $('#typeFilter, #statusFilter,#fromFilter').on('input change', function () {
+
+                    // Get the user's input
+                    var typeVal = $('#typeFilter').val().toLowerCase().trim();
+                    var statusVal = $('#statusFilter').val().toLowerCase().trim();
+                    var fromVal = $('#fromFilter').val().toLowerCase().trim();
+                    // Loop through each row in the table and hide/show based on user input
+                    $('#logTable tbody tr').each(function () {
+
+                        var type = $(this).find('td:nth-child(2)').text().toLowerCase();
+                        var status = $(this).find('td:nth-child(3)').text().toLowerCase();
+                        var from = $(this).find('td:nth-child(5)').text().toLowerCase();
+                        if ((type.indexOf(typeVal) > -1 || typeVal === '') && (status.indexOf(statusVal) > -1 || statusVal === '') && (from.indexOf(fromVal) > -1 || fromVal === '')) {
+                            $(this).show();
+                        } else {
+                            $(this).hide();
+                        }
+
+                    });
+
+                });
+
+            });
+
+
+        </script>
+
+        <script>
+            $(function () {
+                $('input[name="daterange"]').daterangepicker();
+
+            });
+
+        </script>

@@ -1,0 +1,256 @@
+<style>
+  .sidebar-nav ul li a.active {
+    font-weight: 500;
+    color: #fb9678;
+}
+</style>
+<div id="main-wrapper">
+  <!-- ============================================================== -->
+  <!-- Topbar header - style you can find in pages.scss -->
+  <!-- ============================================================== -->
+  <header class="topbar">
+    <nav class="navbar top-navbar navbar-expand-md navbar-dark">
+        <!-- ============================================================== -->
+        <!-- Logo -->
+        <!-- ============================================================== -->
+        <div class="navbar-header">
+            <a class="navbar-brand" href="index.html">
+                </b>
+                <!--End Logo icon -->
+                <!-- Logo text --><span>
+                
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Logo -->
+        <!-- ============================================================== -->
+        <div class="navbar-collapse">
+            <ul class="navbar-nav mr-auto">
+                <!-- This is  -->
+                <li class="nav-item"> <a class="nav-link nav-toggler d-block d-md-none waves-effect waves-dark" href="javascript:void(0)"><i class="ti-menu"></i></a> </li>
+                <li class="nav-item"> <a class="nav-link sidebartoggler d-none d-lg-block d-md-block waves-effect waves-dark" href="javascript:void(0)"><i class="icon-menu"></i></a> </li>
+              
+            </ul>
+            <!-- ============================================================== -->
+            <!-- User profile and search -->
+            <!-- ============================================================== -->
+            <ul class="navbar-nav my-lg-0">
+
+            </ul>
+        </div>
+    </nav>
+</header>
+  <aside class="left-sidebar">
+      <!-- Sidebar scroll-->
+      <div class="scroll-sidebar">
+          <!-- User Profile-->
+          <div class="user-profile">
+              <div class="user-pro-body">
+                  <div>
+                      <img src="/assets/img/user-img.png" alt="user-img" class="img-circle">
+                  </div>
+                  <div class="dropdown">
+                      <a href="javascript:void(0)" class="dropdown-toggle u-dropdown link hide-menu" data-toggle="dropdown" role="button" aria-haspopup="true"
+                          aria-expanded="false">ZOHO
+                          <span class="caret"></span>
+                      </a>
+                      <div class="dropdown-menu animated flipInY">
+                          <!-- text-->
+                          <a href="#" data-toggle="modal" data-target="#change-password" class="dropdown-item">
+                              <i class="ti-user"></i>  Change Password</a>
+                         
+                         
+                          <!-- text-->
+                          <div class="dropdown-divider"></div>
+                          <!-- text-->
+                          <a href="#" class="dropdown-item" id="logout" onclick="logout()">
+                              <i class="fa fa-power-off"></i> Logout</a>
+                          <!-- text-->
+                      </div>
+                  </div>
+              </div>
+          </div>
+        <!-- Sidebar navigation-->
+        <nav class="sidebar-nav">
+          <ul id="sidebarnav">
+              <li class="nav-small-cap">--- PERSONAL</li>
+              <li>
+                  <a class=" waves-effect waves-dark" onclick="location.href='/appdashboard'+location.search" aria-expanded="false">
+                      <i class="icon-speedometer"></i>
+                      <span class="hide-menu">Dashboard
+                          
+                      </span>
+                  </a>
+                 
+              </li>
+              <li>
+                <a class=" waves-effect waves-dark" onclick="location.href='/logs'+location.search" aria-expanded="false">
+                    <i class="ti-server"></i>
+                    <span class="hide-menu">Manage Logs</span>
+                </a>
+                
+            </li>
+             
+              <li class="nav-small-cap">--- SYNCING</li>
+              <li>
+                <a class=" waves-effect waves-dark" onclick="location.href='/contact'+location.search" aria-expanded="false">
+                    <i class="ti-user"></i>
+                    <span class="hide-menu">Contact Sync</span>
+                </a>
+                
+            </li>
+              <li>
+                  <a class=" waves-effect waves-dark" onclick="location.href='/companies'+location.search" aria-expanded="false">
+                      <i class="icons-Building"></i>
+                      <span class="hide-menu">Company Sync</span>
+                  </a>
+               
+              </li>
+              <!-- <li>
+                  <a class=" waves-effect waves-dark" onclick="location.href='/deals'+location.search" aria-expanded="false">
+                      <i class="icons-Project"></i>
+                      <span class="hide-menu">Deals Sync
+                         
+                      </span>
+                  </a>
+                  
+              </li>
+              <li>
+                <a class=" waves-effect waves-dark" onclick="location.href='/products'+location.search" aria-expanded="false">
+                    <i class="icons-Pricing"></i>
+                    <span class="hide-menu">Products Sync
+                       
+                    </span>
+                </a>
+                
+            </li> -->
+             
+             
+            
+          </ul>
+      </nav>
+      <!-- End Sidebar navigation -->
+      </div>
+      <!-- End Sidebar scroll-->
+  </aside>
+
+<script>
+   $(window).on('load', function(){
+    $('.nav-item').each(function(){
+        const url = $(this).attr('data-url');
+        if(window.location.href.match(url)) {
+            $(this).addClass('active');
+        } else {
+            $(this).removeClass('active');
+        }
+    });
+});
+</script>
+ 
+<script>
+  $('#logout').click(function (e) {
+    console.log("phle")
+    e.preventDefault(); /*your_code_here;*/
+    Cookies.remove('hvrif')
+    location.href = "/login"
+    return false;
+  });
+
+
+
+  window.addEventListener('load', function () {
+    let user = Cookies.get('hvrif')
+    if (!user) location.href = "/login"
+  })
+</script>
+<script>
+
+    async function changepassword() {
+        var formFields = {};
+        let validate2=false
+        console.log(formFields);
+        var registerFields = $("#change-password-form").serializeArray();
+
+        registerFields.map((mp) => {
+            formFields[mp.name] = mp.value;
+        });
+        console.log("formFields",formFields)
+        if (formFields.password) {
+    const password = formFields.password.trim();
+    if (password.length < 3 || password.length > 12) {
+      Swal.fire("Password should be between 3 and 12 characters");
+      validate2=true
+    }
+  }
+
+   if(!validate2){     let data = await ajaxRequest({
+            url: "/api/user/change-password"+location.search,
+            method: "POST",
+            body: formFields,
+        });
+        if (data.success) {
+            Swal.fire("User", data.data, "success").then(() => {
+                location.href = "/login";
+            });
+            // location.href = "/dashboard";
+        } else {
+          console.log("i am in")
+            Swal.fire("User", data.error, "error");
+        }}
+    }
+
+    window.addEventListener('load', function() {
+        let user = Cookies.get('hvrif')
+        if (!user) location.href = "/login"
+        $(".sideModal").append(
+            dynamicBootstrapModal({
+                id: "change-password",
+                modal: "modal modal-full-cont fade",
+                dialog: "modal-dialog ",
+                title: "Change Password",
+                body: `  <form id="change-password-form">
+          <div class="row">
+
+            <div class="col-sm-12">
+              <div class="alert alert-warning">
+                <i class="fa fa-info-circle "></i> After changing password session will automatically logout and You
+                will be redirect to login page
+              </div>
+            </div>
+
+
+            <div class="col-md-12">
+              <div class="form-group">
+                <div class="inp-with-icon">
+                  <input type="text" name="old_password" placeholder="Old Password" id="old_password" class="form-control" reqired>
+                  
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group">
+                <div class="inp-with-icon">
+                  <input type="password" name="password" placeholder="New Password"id="password" class="form-control">
+                 
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group">
+                <div class="inp-with-icon">
+                  <input type="password" name="confirm_password" placeholder="Confirm Password"id="confirm_password" class="form-control">
+                 
+                </div>
+              </div>
+            </div>
+            <button type="button"style=" color: #ffff; background: orange;" class="btn btn-custom btn-block" onclick="changepassword()">Submit</button>
+
+          </div>
+        </form>`,
+            })
+        );
+    })
+  
+
+</script>
+
+  

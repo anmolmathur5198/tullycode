@@ -1,0 +1,130 @@
+<aside class="dash-asidebar">
+    <div class="user_profile">
+        <figure>
+            <img src="/assets/img/user-img.png" alt="user image">
+            <figcaption class="user_name"><span>Name</span> <span class="user_name_hubspot user_name"></span></figcaption>
+        </figure>
+
+        <ul class="user-contact">
+       
+            <li>
+                <a class="user-email" href="#"> <i class="fa fa-envelope"></i> <span></span></a>
+            </li>
+            <!-- <li><a href="mailto:tel:9912345678"> <i class="fa fa-phone"></i> 9912345678</a></li>
+      <li><a href="#"> <i class="fas fa-map-marker-alt"></i> 2150 S Jones Blvd, Las <br> Vegas, NV 89146,
+          USA</a></li> -->
+        </ul>
+        <div class="user_profile__ftr">
+            <!-- <a href="#" class="btn-custom btn-custom-sm">Edit</a> -->
+            <a href="#" data-toggle="modal" data-target="#change-password" class="btn-custom btn-custom-sm transparent_btn"><i
+          class="fa fa-phone"></i> Change Password</a>
+        </div>
+    </div>
+    <div class="dash-asidebar-body">
+        <h4 class="h-title">
+            Manage Syncing Mapping
+
+        </h4>
+        <ul class="arrow_list">
+          <li><a onclick="location.href='/appdashboard'+location.search">Dashboard</a></li>
+            <li><a onclick="location.href='/contact'+location.search">Contacts</a></li>
+            
+            <li><a onclick="location.href='/companies'+location.search">Customers</a></li>
+            <!-- <li><a onclick="location.href='/salesorder'+location.search">SalesOrders</a></li> -->
+            
+        </ul>
+        <h4 class="h-title">
+            Manage Logs
+        </h4>
+        <ul class="arrow_list">
+          <li><a onclick="location.href='/logs'+location.search">Logs</a></li>
+        </ul>
+
+        
+    </div>
+
+</aside>
+
+<script src="../public/assets/js/pages/forgot-password.js"></script>
+<script>
+    function logout() {
+
+        Cookies.remove('hvrif')
+        location.href = "/login"
+    }
+    async function changepassword() {
+        var formFields = {};
+        console.log(formFields);
+        var registerFields = $("#change-password-form").serializeArray();
+
+        registerFields.map((mp) => {
+            formFields[mp.name] = mp.value;
+        });
+
+        let data = await ajaxRequest({
+            url: "/api/user/change-password"+location.search,
+            method: "POST",
+            body: formFields,
+        });
+        if (data.success) {
+            Swal.fire("User", data.data, "success").then(() => {
+                location.href = "/login";
+            });
+            // location.href = "/dashboard";
+        } else {
+            Swal.fire("User", data.error, "error");
+        }
+    }
+
+    window.addEventListener('load', function() {
+        let user = Cookies.get('hvrif')
+        if (!user) location.href = "/login"
+        $(".sideModal").append(
+            dynamicBootstrapModal({
+                id: "change-password",
+                modal: "modal modal-full-cont fade",
+                dialog: "modal-dialog ",
+                title: "Change Password",
+                body: `  <form id="change-password-form">
+          <div class="row">
+
+            <div class="col-sm-12">
+              <div class="alert alert-warning">
+                <i class="fa fa-info-circle "></i> After changing password session will automatically logout and You
+                will be redirect to login page
+              </div>
+            </div>
+
+
+            <div class="col-md-12">
+              <div class="form-group">
+                <div class="inp-with-icon">
+                  <input type="text" name="old_password" placeholder="Old Password" class="form-control">
+                  <i class="fas fa-lock"></i>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group">
+                <div class="inp-with-icon">
+                  <input type="password" name="password" placeholder="New Password" class="form-control">
+                  <i class="fas fa-lock"></i>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group">
+                <div class="inp-with-icon">
+                  <input type="password" name="confirm_password" placeholder="Confirm Password" class="form-control">
+                  <i class="fas fa-lock"></i>
+                </div>
+              </div>
+            </div>
+            <button type="button" class="btn btn-custom btn-block" onclick="changepassword()">Submit</button>
+
+          </div>
+        </form>`,
+            })
+        );
+    })
+</script>

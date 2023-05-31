@@ -1,0 +1,116 @@
+* {
+  --tw-bg-opacity: 1;
+  margin: 0;
+}
+/* body {
+  background-color: rgba(229, 231, 235) !important;
+} */
+.navbar {
+  border: none;
+  box-shadow: none !important;
+}
+footer {
+  bottom: 0;
+  background-color: rgba(229, 231, 235) !important;
+  z-index: 2;
+  opacity: 1;
+  position: fixed;
+  width: 100%;
+}
+.header-filter::before {
+  background: #dedede;
+}
+
+.card-login .form {
+  min-height: 0 !important;
+}
+.card-img-top {
+  height: 10rem;
+}
+.bg-ds-primary {
+  background: #000000 !important;
+  color: #ccc !important;
+}
+.ds-success {
+  background: lightgray;
+}
+.ds-green {
+  background: linear-gradient(to bottom, #66ffff 12%, #00ff99 95%);
+}
+.custom_filter {
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.3) !important;
+  border-radius: 1.25rem !important;
+  margin: 5px 0px;
+  padding: 1rem;
+}
+.huboptionsdefined {
+  background-color: #ff9800 !important;
+  padding: 0.4rem;
+  line-height: 2rem;
+  margin: 1rem;
+  border-radius: 1rem;
+  color: black;
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.1) !important;
+  text-transform: capitalize;
+}
+.webhookurl {
+  border-left: 5px solid aqua;
+  border-bottom-left-radius: 5px;
+  border-top-left-radius: 5px;
+}
+.editabletextarea {
+  -webkit-appearance: textarea;
+  cursor: text;
+  /* min-height: 200px; */
+  overflow: auto;
+  height: auto;
+  padding: 2px;
+  resize: vertical;
+  -moz-box-shadow: inset 0px 1px 2px #ccc;
+  -webkit-box-shadow: inset 0px 1px 2px #ccc;
+  box-shadow: inset 0px 1px 2px #ccc;
+}
+.bg-login-image {
+  background: url(https://source.unsplash.com/600x800);
+  background-position: center;
+  background-size: cover;
+}
+.bg-register-image {
+  background: url(https://source.unsplash.com/600x800);
+  background-position: center;
+  background-size: cover;
+}
+.bg-password-image {
+  background: url(https://source.unsplash.com/600x800);
+  background-position: center;
+  background-size: cover;
+}
+.select2-selection__rendered {
+  line-height: 31px !important;
+}
+.select2-container .select2-selection--single {
+  height: 35px !important;
+}
+.select2-selection__arrow {
+  height: 34px !important;
+}
+.input-group-text > img{
+  min-height:3rem !important
+}
+select.custom-select {
+  padding: 0rem 1rem !important
+}
+.users_row{
+    display: flex;
+    -ms-flex-wrap: wrap;
+    /* flex-wrap: wrap; */
+    flex-direction: row;
+    margin-right: -15px;
+    margin-left: -15px;
+    overflow: auto;
+}
+@media (max-width: 991px) {
+  .navbar.navbar-transparent .navbar-toggler .navbar-toggler-icon {
+    background-color: #000000;
+  }
+}

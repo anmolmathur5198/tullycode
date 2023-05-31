@@ -1,0 +1,39 @@
+.card-header{
+    padding: 1.5rem 2rem;
+    margin: -2.5rem 2rem;
+    margin-bottom: 0;
+    background:#000000;
+    /* background:linear-gradient(60deg, #26c6da, #0097a7); */
+    /* box-shadow: 0 5px 20px 0px rgb(0 0 0 / 20%), 0 13px 24px -11px rgb(0 188 212 / 60%); */
+    color: #fff !important;
+    /* background: linear-gradient(
+        60deg
+        , #ab47bc, #7b1fa2);
+    border-bottom: 1px solid rgba(0,0,0,.125);
+    box-shadow: 0 5px 20px 0px rgb(0 0 0 / 20%), 0 13px 24px -11px rgb(156 39 176 / 60%); */
+}
+
+.color-bg-info{
+    /* background:linear-gradient(60deg, #26c6da, #0097a7); */
+    background:#000000;
+    /* box-shadow: 0 5px 20px 0px rgb(0 0 0 / 20%), 0 13px 24px -11px rgb(0 188 212 / 60%); */
+    color: #fff !important;
+}
+.viewCustomerPropertyHeadline{
+    border-bottom:5px solid #0097a7 !important;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 0.2rem;
+    
+}
+.form-select.is-valid, .was-validated .form-select:valid {
+
+    background-image: none;
+    }
+i.fa.fa-info{
+    font-size: 12px;
+}
+button, span{
+    outline:none
+}    

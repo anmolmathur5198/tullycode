@@ -1,0 +1,206 @@
+<%- include('header') %>
+
+
+
+    <!-- dashboard start -->
+
+
+
+
+
+
+
+    <div class="page-wrapper">
+        <!-- ============================================================== -->
+        <!-- Container fluid  -->
+        <!-- ============================================================== -->
+        <div class="container-fluid">
+            <div class="row page-titles">
+                <div class="col-md-5 align-self-center">
+                    <h4 class="text-themecolor">Dashboard </h4>
+                </div>
+                <div class="col-md-7 align-self-center text-right">
+                    <div class="d-flex justify-content-end align-items-center">
+                        <ol class="breadcrumb">
+
+                            <li class="breadcrumb-item active">Dashboard </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Column -->
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row ">
+
+
+                                <div class="col-md-4">
+                                    <div class="text-center mb-2"><img src="/assets/img/crm1.png" alt=""
+                                            class="border rounded"></div>
+                                    <div class="syncdata-log" style="text-align: center;">
+                                        <p class="lead redirectToLead"></p>
+                                        <script>
+                                            window.addEventListener("load", function () {
+                                                let param = getQueryParams();
+                                                console.log(param, "data");
+                                                if (param.hvrif) {
+                                                    $(".redirectToLead").html(
+                                                        `<a class="btn waves-effect waves-light btn-info" href='/api/auth/hubspot${location.search}'>Connect HubSpot</a>
+                              `
+                                                    );
+                                                } else {
+                                                    $(".redirectToLead").html(
+                                                        `<a href='/api/auth/hubspot'class="btn waves-effect waves-light btn-info" >Connect HubSpot</a>`
+                                                    );
+                                                }
+                                            });
+                                        </script>
+                                        <label>
+
+                                            <p class="text-success dynamics365_rs_url"><b
+                                                    class="dynamics365_rs_url">Portal Id : <%= store.hub_id %></b>
+                                                <br> <b>HubSpot Token is verified...</b>
+                                            </p>
+                                        </label>
+                                    </div>
+                                    <!-- <div class="custom-datatype">Customer Data Type <span><a href="">Contacts <i
+                                                            class="fa fa-question-circle"></i></a></span> </div> -->
+                                </div>
+                                <div class="col-md-4 text-center" style="margin: auto;">
+                                    <div class="exchange-area"><i class="fa fa-long-arrow-alt-right"></i> <i
+                                            class="fa fa-exchange-alt"></i> <i class="fas fa-long-arrow-alt-left"></i>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="text-center mb-2"><img src="/assets/img/crm2.png" alt=""
+                                            class="border rounded"></div>
+                                    <div class="syncdata-log" style="text-align: center;">
+                                        <p class="lead hubverified">
+                                            <a href="#" data-toggle="modal" data-target="#change-dynamics-url"
+                                                class="btn waves-effect waves-light btn-info">Connect Zoho</a>
+                                            <!-- <button
+                            onclick="location.href='/api/auth/dynamics365'+ location.search"
+                            class="btn btn-lg text-right btn-custom btn-custom-sm"
+                            >
+                            Connect Dynamics
+                            </button> -->
+                                        </p>
+
+
+                                        <label>
+
+                                            <p class="text-success dynamics365_rs_url"><b class="dynamics365_rs_url">
+                                                    Account : </b>
+                                                <br> <b>Zoho Token is verified.</b>
+                                            </p>
+                                            <input type="hidden" id="hiddenResourceUrl" value="<%= store.fullurl %>" />
+                                        </label>
+                                    </div>
+                                    <!-- <div class="custom-datatype">Customer Data Type <span><a href="">Contacts <i
+                                                            class="fa fa-question-circle"></i></a></span> </div> -->
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Column -->
+            </div>
+
+            <div class="row">
+
+                <div class="col-lg-7">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Manage Syncing</h5>
+                            <div class="row">
+                                <!-- <div class="row synft"> -->
+                                <div class="col-sm-12 mt-4 row mb-3">
+                                    <div class="col-sm-10">
+                                    you can Turn <b class="servicesUpdatedlabel">
+                                        <%= store.duser.AllSyncingStatus ? 'OFF' :'ON' %>
+                                    </b> all the syncing services from here.</div>
+                                    <div class="col-sm-2 text-center ">
+
+                                        <div class="sync-action">
+                                            <input type="checkbox" checked class="js-switch" data-color="green"
+                                                data-size="small" <%=store.duser.AllSyncingStatus ? 'checked' :'' %>
+                                            onclick="toogleHubSageFieldOption(this)" id="switch2" />
+                                            <label for="switch2"></label>
+                                        </div>
+                                </div>
+                               
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-lg-5">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">User Details</h5>
+
+                            <div class="users_row">
+                                <% store.users.forEach(fr=>{ %>
+                                    <div class="col-sm-12 ">
+                                        <div class="enquiry-block default__box">
+                                            <!-- <h5 class="t_heading2">HubSpot</h5> -->
+                                            <ul class="info-pro">
+                                                <li><span>Name :</span>
+                                                    <%= fr.firstname + ' ' + fr.lastname %>
+                                                </li>
+                                                <li><span>Email :</span>
+                                                    <%= fr.email %>
+                                                </li>
+
+                                            </ul>
+
+                                        </div>
+                                    </div>
+                                    <% }) %>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Container fluid  -->
+        <!-- ============================================================== -->
+    </div>
+
+
+    <!-- dashboard End -->
+
+
+
+
+    <!-- scroll Top start -->
+    <a id="back-to-top" href="#" class="back-to-top"> <i class="fa fa-chevron-up"></i> </a>
+    <!-- scroll Top End -->
+    <div class="sidebar thread-mail-box mySidebar"> <a href="javascript:void(0)"
+            class="js-open-sidethread closebtn">×</a>
+
+    </div>
+    <script>
+        $(function () {
+
+            // Switchery
+            var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
+            $('.js-switch').each(function () {
+                new Switchery($(this)[0], $(this).data());
+            });
+        })
+    </script>
+    <script src="/assets/js/pages/appdashboard.js"></script>
+    <%- include('footer') %>
