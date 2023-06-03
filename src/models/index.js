@@ -7,5 +7,5 @@ exports.hubsagedynamicoptions = require("./hubsagedynamicoptions");
 exports.logs = require("./logs");
 exports.zoho_accounts = require("./zoho_accounts");
 exports.zoho_products = require("./zoho_products");
-exports.zoho_contacts = require("./zoho_contacts");
+exports.TramsProfile = require("./tramProfiles");
 
