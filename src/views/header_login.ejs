@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <!-- Favicon icon -->
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/icon.png">
+  <title>Trams Session</title>
+  
+  <!-- page css -->
+  <link href="assets/dist/css/pages/login-register-lock.css" rel="stylesheet">
+  <link href="assets/dist/css/pages/dashboard1.css" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link href="assets/dist/css/style.min.css" rel="stylesheet">
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.4.8/sweetalert2.min.js" integrity="sha512-7x7HoEikRZhV0FAORWP+hrUzl75JW/uLHBbg2kHnPdFmScpIeHY0ieUVSacjusrKrlA/RsA2tDOBvisFmKc3xw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+  <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+</head>
+
+<body class="inner-pg">
+  <!-- <%- include('loader') %>  -->
+
+  <div></div>
+
+  <!-- Cookie Consent by https://www.PrivacyPolicies.com -->
+  <script
+    type="text/javascript"
+    src="//www.privacypolicies.com/public/cookie-consent/3.1.0/cookie-consent.js"
+  ></script>
+  <script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function () {
+      cookieconsent.run({
+        notice_banner_type: "interstitial",
+        consent_type: "express",
+        palette: "light",
+        language: "en",
+      });
+    });
+  </script>
+
+  <noscript
+    >Cookie Consent by
+    <a
+      href="https://www.PrivacyPolicies.com/cookie-consent/"
+      rel="nofollow noopener"
+      >PrivacyPolicies.com</a
+    ></noscript
+  >
+  <!-- End Cookie Consent -->
+
+  <script>
+    let urlParams = new URLSearchParams(location.search);
+    let hvrif = urlParams.get("hvrif");
+    let plat = urlParams.get("plat");
+    if (location.pathname !== "/404") {
+      if (location.pathname !== "/") {
+        // if (!hvrif) location.href = "/404";
+        // if (!plat) location.href = "/404";
+      }
+    }
+
+    function getQueryParams() {
+      let urlParams = new URLSearchParams(location.search);
+      let hvrif = urlParams.get("hvrif");
+      let plat = urlParams.get("plat");
+      let success = urlParams.get("success");
+      let succes = urlParams.get("succes");
+
+      return {
+        hvrif,
+        plat,
+        success,
+        succes,
+      };
+    }
+  </script>
+</body>

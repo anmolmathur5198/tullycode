@@ -1,0 +1,237 @@
+<%- include('header') %>
+    <style>
+        .sagemainrow {
+            background-color: #e5e7eb;
+            padding: 5rem;
+        }
+
+        .h-bottom-border {
+            border-bottom: 1px solid #17a2b8;
+            border-radius: 2px;
+            border-width: 0.2rem;
+            display: inline-block;
+            width: auto;
+            text-align: center;
+            margin: auto;
+            padding: 5px 20px 5px;
+        }
+               .lookupproperty {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding-top: 31px;
+    padding-right: 6rem;
+}
+
+    </style>
+
+<div class="page-wrapper">
+    <!-- ============================================================== -->
+    <!-- Container fluid  -->
+    <!-- ============================================================== -->
+    <div class="container-fluid">
+        <div class="row page-titles">
+            <div class="col-md-5 align-self-center">
+                <h4 class="text-themecolor">Products Sync</h4>
+            </div>
+            <div class="col-md-7 align-self-center text-right">
+                <div class="d-flex justify-content-end align-items-center">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a onclick="location.href='/appdashboard'+location.search">Dashboard</a></li>
+                        <li class="breadcrumb-item active">Products Sync</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <input type="hidden" id="sagemainstore" name="radio-group">
+        </div>
+
+        <div class="row">
+            <!-- Column -->
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title" style="text-align: center;margin-bottom: 25px;">Feild Mapping</h5>
+                        
+                        <div class="default_block field-mapping">
+                            <!-- Store Input Options -->
+                            <input type="hidden" id="hubspot_options" value="<%= JSON.stringify(options) %>" />
+                            <input type="hidden" id="sage_options" value="<%= JSON.stringify(sageFields) %>" />
+                            <input type="hidden" id="optionsofhubsage"
+                                value="<%= JSON.stringify(store.optionsofhubsage) %>" />
+                            <!-- End Store Input Option -->
+                            <!-- Staring Mapping HubSpot Fields -->
+                           
+                            <form id="sage_HubSpot_form_mapping">
+                                <!-- 1 -->
+                                <% hubSageFields.forEach((mp,i)=> {%>
+                                    <div class="row mb-2">
+                                        <div class="col-lg-1"></div>
+                                        <div class="col-lg-4 ">
+                                            <div class="input-group mb-2">
+                                                <div class="input-group-prepend">
+                                                    <div class="input-group-text" style="padding: 0%;"> <img src="/assets/img/crm3.png" alt="">
+                                                    </div>
+                                                </div>
+                                                <input type="text" style="padding: 27px;" class="form-control" readonly placeholder="<%= mp.hub %>"
+                                                    value="<%= mp.hub %>">
+                                            </div>
+                                        </div>
+                                        <div class=" col-lg-1 text-center mt-2"><img src="/assets/img/direc.png" alt="">
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="input-group mb-2">
+                                                <input type="text" style="padding: 27px;" class="form-control" readonly
+                                                    placeholder="<%= mp.sage %>" value="<%= mp.sage %>">
+                                                <div class="input-group-append">
+                                                    <div class="input-group-text" style="padding: 0%;"><img src="/assets/img/crm2.png" alt="">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- <div class="col-lg-2 col-6 mt-13 text-right">
+                                            <input type="checkbox"
+                                                onclick="toogleHubSageFieldOption(this,'<%= JSON.stringify(mp) %>')"
+                                                class="toogleHubSageFieldOptions" option="<%= JSON.stringify(mp) %>"
+                                                id="<%= (mp.hub+'_'+mp.sage).replace(/\s+/g, " ")%>" checked />
+                                            <label for="<%= (mp.hub+'_'+mp.sage).replace(/\s+/g, " ")%>"></label>
+                                        </div> -->
+                                    </div><br>
+                                    <% }) %>
+                               
+    
+                                       
+    
+    
+                                        <h5 class="card-title" style="margin-top: 20px;text-align: center;">Dynamic field mappings</h5><br>
+    
+                                        <div class="custom_fields"></div>
+                            </form>
+                            <!-- End HubSpot Fields -->
+                            <div class="row connect-rule-ft ">
+                                <div class="col-sm-6 col-6" style="margin-top: 35px;">
+                                    <a class=" add_custom_field_options card-title " style="color: #03a9f3; font-size: medium;" onclick="add_custom_field_options()" ><i
+                                            class=" fas fa-plus-circle" style="color: #03a9f3;"></i> Add another rules...</a>
+                                    <!-- <button type="button" class="btn btn-primary add_custom_field_options btn-sm"
+                  onclick="add_custom_field_options()">
+                  Add Properties
+                </button> -->
+                                </div>
+    
+                            </div><br>
+                            <div style="text-align: center; ">
+                                <% if(store.isSyncing){%>
+                                    <button type="button" class="btn  mb-5 btn-custom btn-custom-sm"
+                                        onclick="startSyncing(this)">
+                                        Start Syncing
+                                    </button>
+                                    <% } %>
+                                        <button type="button" class="btn waves-effect waves-light btn-info" style="text-align: center;"
+                                            onclick="saveDynamicOptionChanges(this)">
+                                            Save Property Mapping
+                                        </button>
+                            </div>
+    
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Column -->
+        </div>
+
+
+        </div>
+        </div>
+
+
+    <!-- Modal Window -->
+    <div class="modal modal-right fade" id="syncingbody_left_modal" tabindex="-1" role="dialog"
+        aria-labelledby="left_modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Syncing data is in progress</h5> <br>
+                    <button type="button" onclick='$("#syncingbody_left_modal").modal("hide")' class="close"
+                        data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+
+                </div>
+
+                <div class="modal-body">
+                    <div class="progress" style="height: 1.375rem;">
+                        <div class="progress-bar syncingprogressbar" role="progressbar" style="width: 0%;"
+                            aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                    </div>
+                    <div>
+                        <div class="p1- m-1">No. of HubSpot contacts found <span
+                                style="font-size: 20px; font-weight: 600;" class="hubspot_contacts_number"></span></div>
+                        <div class="p1- m-1">No. of Xero contacts found <span style="font-size: 20px; font-weight: 600;"
+                                class="sage_contacts_number"></span></div>
+                    </div>
+                    <div class="syncing_body_modal"></div>
+                </div>
+                <div class="modal-footer modal-footer-fixed">
+                    <button type="button" onclick='$("#syncingbody_left_modal").modal("hide")' class="btn btn-danger"
+                        data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- <div style="height: 5rem;"></div> -->
+    <!-- Modal for Rendering Response -->
+    <div class="modal fade right" id="fullHeightModalRight" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <!-- Add class .modal-full-height and then add class .modal-right (or other classes from list above) to set a position to the modal -->
+        <div class="modal-dialog modal-full-height modal-right" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title w-100" id="myModalLabel">Syncing Result</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <ul class="list-group"></ul>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        Close
+                    </button>
+                    <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        let param = getQueryParams();
+
+        function showAlertMessage(type, data) {
+            $("#showMessage").show();
+            $("#showMessage").removeClass();
+            $("#showMessage").addClass(
+                `alert alert-${type} alert-dismissible fade show`
+            );
+            $("#showMessage > strong").html(data);
+            setTimeout(() => {
+                $("#showMessage").removeClass("show");
+                $("#showMessage").hide();
+            }, 5000);
+        }
+
+        function closeAlert() {
+            $("#showMessage").removeClass("show");
+            $("#showMessage").hide();
+        }
+        if (param.success) {
+            showAlertMessage("success", "Custom object created successfully.");
+        }
+    </script>
+    <script src="/assets/js/pages/equipment.js"></script>
+
+    <%- include('footer') %>

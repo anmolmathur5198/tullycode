@@ -1,0 +1,174 @@
+<%- include('header') %>
+    <style>
+        .tab-content {
+            border: 1px solid var(--grey4);
+            border-radius: 4px;
+            overflow: hidden;
+            background: var(--white);
+            position: relative
+        }
+    </style>
+    <!-- <div class="Warning Warning-success" role="Warning">
+  A simple success Warning—check it out!
+</div>
+<div class="Warning Warning-danger" role="Warning">
+  A simple danger Warning—check it out!
+</div>
+<div class="Warning Warning-warning" role="Warning">
+  A simple warning Warning—check it out!
+</div> -->
+    <div class="dashboard startpg">
+
+        <%- include('_sidenavbar') %>
+            <!-- aside bar End -->
+
+            <!-- dash board body start -->
+            <div class="dashboard-body">
+
+                <!-- banner start -->
+                <div class="pg-banner">
+                    <a href="javascript:void(0)" class="menuImage2  d-lg-none"> <span class="line1"></span>
+                        <span class="line2"></span> <span class="line3"></span> </a>
+                    <h2>Auto Sync Setting</h2>
+
+                </div>
+                <!-- banner End -->
+                <!-- Trigger page start -->
+
+                <div class="trigger-page sec_space">
+                    <!--tab module-->
+                    <div class="container">
+                        <div class="tab-content">
+                            <ul class="nav nav-tabs responsive " role="tablist">
+
+                                <% for(var i=0; i< data.length;i++) { %>
+                                    <li class="nav-item">
+                                        <a class="nav-link <%- i == 0 ? ' active':''%>" data-toggle="tab" href="#<%= data[i]['crone-type']%>">
+                                            <%= data[i]['crone-type']%>
+                                        </a>
+                                    </li>
+                                    <% } %>
+
+
+                            </ul>
+                            <div class="tab-content responsive">
+                                <% for(var i=0; i< data.length;i++) { %>
+                                    <div id="<%= data[i]['crone-type']%>" class="tab-pane <%- i == 0 ? ' active':''%>" role="tabpanel">
+                                        <div class="trigger_inner sdw-default">
+
+                                            <div class="default__box">
+                                                <div class="form-group">
+                                                    <label for="cron-status">Auto <%= data[i]['crone-type']%> Status</label>
+                                                    <select class="form-control" id="cron-status<%=(i+1)%>">
+                                <option value="ON"  <%- data[i]['status'] === 'ON'? 'selected' :'' %>>ON</option>
+                                 <option value="OFF" <%- data[i]['status'] === 'OFF'? 'selected' :'' %>>OFF</option>
+                              </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="cron-status">Duration Type</label>
+
+                                                    <select class="form-control" id="duration-type<%=(i+1)%>">
+                                                            <%for (var key in data[i]["time"]) {%>
+                                                                <option value="<%=key%>" <%- data[i]["activetime"]==key ? 'selected':'' %>><%=key.toUpperCase()%></option>
+                                                              <%}%>
+                            </select>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label>Duration</label>
+
+                                                    <input type="number" id="duration<%=(i+1)%>" class="form-control" value="<%= data[i]['time'][data[i]['activetime']] %>" required="" min="1">
+                                                    <span class="help-block text-danger" id="error-message" style="display: none;">Please enter valid number
+                                                        </span>
+                                                </div>
+                                                <div class="form-group text-center">
+                                                    <button class="btn btn-primary" onclick="saveconfig(<%=(i+1)%>,<%=JSON.stringify(data[i]['id'])%>)">Save</button>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <% } %>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!--end tab module-->
+
+
+
+
+                    <!-- Trigger page End -->
+
+                </div>
+            </div>
+
+
+            <!-- change password The Modal -->
+    </div>
+    <script src="/assets/js/pages/sagedealinvoice.js"></script>
+    <%- include('footer') %>
+        <script>
+            async function saveconfig(index, id) {
+                let data = {};
+                data.id = id;
+                data.cronstatus = $("#cron-status" + index).val();
+                data.type = $("#duration-type" + index).val();
+                data.duration = $("#duration" + index).val();
+                if (data.type == "month" && (data.duration > 12 || data.duration != 0)) {
+                    // Warning("Please enter 1-12 month day")
+                    Swal.fire("Warning", "Please enter 1-12 month day", "warning");
+                    return false;
+                } else if (data.type == "dayOFMonth" && (data.duration > 31 || data.duration != 0)) {
+                    // Warning("Please enter 1-31 month date")
+                    Swal.fire("Warning", "Please enter 1-31 month dat", "warning");
+                    return false;
+                } else if (data.type == "hours" && data.duration > 23) {
+                    //Warning("Please enter 1-23 hours value")
+                    Swal.fire("Warning", "Please enter 1-23 hours value", "warning");
+                    return false;
+                } else if (data.type == "minutes" && data.duration > 59) {
+                    //Warning("Please enter 1-59 minutes")
+                    Swal.fire("Warning", "Please enter 1-59 minutes", "warning");
+                    return false;
+                } else if (data.type == "seconds" && data.duration > 59) {
+                    //Warning("Please enter 1-59 seconds")
+                    Swal.fire("Warning", "Please enter 1-59 seconds", "warning");
+                    return false;
+                } else if (data.type == "dayOfWeek" && data.duration > 7) {
+                    //Warning("Please enter 1-7 weeks day value")
+                    Swal.fire("Warning", "Please enter 1-7 weeks day value", "warning");
+                    return false;
+                }
+                $.ajax({
+                    async: false,
+                    url: '/update-crone-status',
+                    data: data,
+                    type: "PUT",
+                    success: function(response) {
+                        // Warning('res')
+                        // Swal.fire("Warning", "Please enter 1-7 weeks day value", "warning");
+                        Swal.fire("Sucess", "Successfully updated", "success").then(() => {
+                            //window.location.reload(true);
+                        });
+
+                        //renderAllTableData();
+
+                    },
+                    error: function(request, status, error) {
+                        if (error == 'Not Found') {
+                            //Warning("Session out")
+                            window.location.href = '/'
+                        }
+                        if (request.responseJSON && request.responseJSON.error) {
+
+                            Warning(request.responseJSON.error);
+
+                        }
+                    }
+
+                });
+                // return false
+
+            }
+        </script>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/icon.png">
+    <title>Trams Session</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css" />
+    <link href="/assets/node_modules/morrisjs/morris.css" rel="stylesheet">
+    <link href="/assets/css/core/toastr.css" type="text/css" rel="stylesheet" />
+   
+    <link href="/assets/node_modules/toast-master/css/jquery.toast.css" rel="stylesheet">
+   
+    <link href="/assets/dist/css/style.min.css" rel="stylesheet">
+    
+    <link href="/assets/dist/css/pages/dashboard1.css" rel="stylesheet">
+    <link href="/assets/dist/css/pages/dashboard3.css" rel="stylesheet">
+    <link href="/assets/dist/css/pages/dashboard2.css" rel="stylesheet">
+    <link href="/assets/node_modules/bootstrap-datepicker/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/node_modules/select2/dist/css/select2.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/node_modules/switchery/dist/switchery.min.css" rel="stylesheet" />
+    <link href="/assets/node_modules/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
+    <link href="/assets/node_modules/bootstrap-tagsinput/dist/bootstrap-tagsinput.css" rel="stylesheet" />
+    <link href="/assets/node_modules/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.css" rel="stylesheet" />
+    <link href="/assets/node_modules/multiselect/css/multi-select.css" rel="stylesheet" type="text/css" />
+    
+    <link href="/assets/dist/css/style.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <!-- <script src="/assets/node_modules/jquery/jquery-3.2.1.min.js"></script> -->
+
+
+    <script src="https://unpkg.com/cronstrue@latest/dist/cronstrue.min.js"></script>
+    <script>
+       var cronstrue = window.cronstrue;
+   </script> 
+
+   <link type="text/css" href="/assets/css/core/jquery-gentleSelect.css" rel="stylesheet" />
+<link type="text/css" href="/assets/css/core/jquery-cron.css" rel="stylesheet" />
+   
+   <link href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" rel="stylesheet" />
+   <link href="/assets/css/core/datatable_material_component.css" type="text/css" rel="stylesheet">
+   <link href="/assets/css/core/datatable_material.css" type="text/css" rel="stylesheet">
+   <link href="/assets/css/core/daterangepicker.css" type="text/css" rel="stylesheet">
+   <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+ 
+</head>
+
+<body class="skin-default fixed-layout">
+    
+        <%- include('partials/_navbar') %>
+
+            <div>
+            </div>
+
+            <!-- Cookie Consent by https://www.PrivacyPolicies.com -->
+            <script type="text/javascript"
+                src="//www.privacypolicies.com/public/cookie-consent/3.1.0/cookie-consent.js"></script>
+            <script type="text/javascript">
+                document.addEventListener("DOMContentLoaded", function () {
+                    cookieconsent.run({
+                        notice_banner_type: "interstitial",
+                        consent_type: "express",
+                        palette: "light",
+                        language: "en",
+                    });
+                });
+            </script>
+
+            <noscript>Cookie Consent by
+                <a href="https://www.PrivacyPolicies.com/cookie-consent/"
+                    rel="nofollow noopener">PrivacyPolicies.com</a></noscript>
+            <!-- End Cookie Consent -->
+
+            <script>
+                let urlParams = new URLSearchParams(location.search);
+                let hvrif = urlParams.get("hvrif");
+                let plat = urlParams.get("plat");
+                if (location.pathname !== "/404") {
+                    if (location.pathname !== "/") {
+                        // if (!hvrif) location.href = "/404";
+                        // if (!plat) location.href = "/404";
+                    }
+                }
+
+                function getQueryParams() {
+                    let urlParams = new URLSearchParams(location.search);
+                    let hvrif = urlParams.get("hvrif");
+                    let plat = urlParams.get("plat");
+                    let success = urlParams.get("success");
+                    let succes = urlParams.get("succes");
+
+                    return {
+                        hvrif,
+                        plat,
+                        success,
+                        succes,
+                    };
+                }
+                // $('.loading').show()
+
+            </script>
+
+</body>
