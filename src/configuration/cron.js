@@ -148,6 +148,7 @@ exports.runCron = () => {
   ).start();
 
   //  This cron is used for refresh the sessionId  which returns by the trams server of login API we have to store this sessionId into MongoDB for future reference. (Nischay Jain)
+  // nischay code for cron
   new CronJob("* */5 * * *", async () => {
     try {
       const body = {
@@ -170,3 +171,5 @@ exports.runCron = () => {
   }).start();
 
 };
+
+
