@@ -113,11 +113,6 @@ exports.loginUserController = async (req, res) => {
       user = JSON.parse(JSON.stringify(user));
       if (user) {
         if (!user.password) {
-<<<<<<< HEAD
-
-
-=======
->>>>>>> e1913ad32566aeb1b70775355419c791734e9e76
         }
         let checkpassword = bcrypt.compareSync(data.password, user.password);
         // console.log(user);
@@ -132,7 +127,7 @@ exports.loginUserController = async (req, res) => {
           if (!hoautk) {
             return res.redirect("/api/auth/hubspot");
           } else {
-              console.log({ tokenexpireation: "Token expired" });
+            console.log({ tokenexpireation: "Token expired" });
             if (tokens.isTokenExpired(hoautk)) {
               return res.send({
                 success: false,
@@ -235,10 +230,6 @@ exports.loginUserController = async (req, res) => {
   }
 };
 
-<<<<<<< HEAD
-
-=======
->>>>>>> e1913ad32566aeb1b70775355419c791734e9e76
 exports.changePassword = async (req, res) => {
   try {
     let user = req.dsuser;
@@ -402,7 +393,7 @@ exports.forgotPassword = async (req, res) => {
 exports.appdashboard = async (req, res) => {
   try {
     let user = req.dsuser;
-    console.log("--",user)
+    console.log("--", user)
     let duser = await userregister.findOne({ _id: user._id }).lean();
 
     let users = await userregister.find().lean();
@@ -410,7 +401,7 @@ exports.appdashboard = async (req, res) => {
     let store = {
       hub_id: user.hub_id,
       dynamics_resourceURL: user.dynamicsresourceurl
-       ,
+      ,
       fullurl: user.dynamicsresourceurl,
       total_users: users.length,
       apps: 2,
@@ -657,8 +648,5 @@ exports.serversidelogs = async (req, res) => {
 
 
 
-<<<<<<< HEAD
-=======
 
 
->>>>>>> e1913ad32566aeb1b70775355419c791734e9e76
