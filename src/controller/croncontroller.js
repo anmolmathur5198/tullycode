@@ -28,18 +28,14 @@ class CronController {
   constructor(user) {
     this.user = user;
   }
-
   async refreshHubSpotToken(requser) {
     try {
-      // console.log("Refreshing HubSpot Token");
+      console.log("Refreshing HubSpot Token for user", requser);
       let user = requser;
       if (user && user.email) {
         let getUser = await userregister.findOne({ email: user.email });
         if (!getUser) {
-          return {
-            success: false,
-            error: "Authentication Failed",
-          };
+          return { success: false, error: "Authentication Failed", };
         }
       } else {
         return {
@@ -73,6 +69,7 @@ class CronController {
             };
 
             const result = await axios(config);
+            console.log(">>>>>>>>cvzxcvzcvzcvzcvzcvzxcv result", result)
             if (result.data && result.data.access_token) {
               tokens.findOneAndUpdate(
                 {
@@ -98,6 +95,7 @@ class CronController {
                   // console.log("HubSpot Token Refreshed");
                 }
               );
+              console.log("token good")
               return { success: true, data: result.data };
             }
           } else {
@@ -117,8 +115,68 @@ class CronController {
     }
   }
 
+  async addTramsProfile(requser) {
+    try {
+      let { access_token } = await Tokens.findOne({ tokenname: "TramsSessionId" });
+      let data = JSON.stringify({
+        "SessionID": access_token,
+        "params": {
+          "modifyDateFrom": "2022-06-03T09:27:40.009Z",
+          "SortBy": [
+            "profileNo"
+          ],
+          "includeCols": [
+            "profileNo"
+          ]
+        },
+        "noMetaData": true
+      });
 
+      let config = {
+        method: 'get',
+        maxBodyLength: Infinity,
+        url: 'http://tlt-dev01:8085/profilequery.runquery',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        data: data
+      };
+
+      axios.request(config).then((response) => {
+        // let allProfiles = response.data.result.dataset.data.profileQuery;
+        // console.log("Trams Profile Data Count>>", allProfiles);
+        let allProfiles = [
+          {
+            "profileNo": 90
+          },
+          {
+            "profileNo": 111
+          },
+          {
+            "profileNo": 178
+          },
+          {
+            "profileNo": 182
+          },
+          {
+            "profileNo": 247
+          }]
+
+        allProfiles.forEach(element => {
+          TramsProfile.findOneAndUpdate({ profileNo: element.profileNo }, { profileNo: element.profileNo },
+            { new: true, upsert: true }, function (error, data) {
+              error ? console.log("Error Occured in Cron Controller", error) : console.log(`Loop is running`, data);
+            })
+        });
+      });
+
+    } catch (error) {
+      return { success: false, error };
+    }
+  }
 }
+
+
 
 module.exports = CronController;
 

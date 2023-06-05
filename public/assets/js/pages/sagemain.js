@@ -106,7 +106,11 @@ function add_custom_field_options() {
         <div class="col-lg-4">
            <div class="input-group mb-2">
             <select onchange="selectCustomMappingField(this,'sage',${total_child_options})" style="height:auto" class="form-control custom-select bg-white p-3 sage_custom_field" name="sage_custom_field_${total_child_options}" id="sage_custom_field_${total_child_options}">
+<<<<<<< HEAD
               <option selected disabled>Choose Myenergi Mapping</option>
+=======
+              <option selected disabled>Choose Trams Mapping</option>
+>>>>>>> e1913ad32566aeb1b70775355419c791734e9e76
               ${sage_options.map((fr) => {
                 var store = JSON.parse($("#sagemainstore").val()).hubSageFields;
                 let fields = [];
@@ -140,7 +144,11 @@ function add_custom_field_options() {
           <option selected disabled>Choose Preference</option>
           <option value="1">Bidirectional</option>
           <option value="2">Preference HubSpot</option>
+<<<<<<< HEAD
           <option value="3">Preference ZOHO</option>
+=======
+          <option value="3">Preference Trams</option>
+>>>>>>> e1913ad32566aeb1b70775355419c791734e9e76
         </select>
         </div>
         <div class="col-md-1">
@@ -152,6 +160,7 @@ function add_custom_field_options() {
   //  $(".select2Apply").select2();
 }
 
+<<<<<<< HEAD
 function transferFrom(event) {
   var value = $(event).val();
   modifysagemainstore({ name: "transferFrom", value });
@@ -167,6 +176,9 @@ function toogleHubSageFieldOption(event, data) {
   });
 }
 function remove_custom_field(event, index) {
+=======
+function remove_custom_field(event, index) { 
+>>>>>>> e1913ad32566aeb1b70775355419c791734e9e76
   Swal.fire({
     title: "Remove",
     text: "Are you sure to removed mapped field",
@@ -178,27 +190,51 @@ function remove_custom_field(event, index) {
   }).then((result) => {
     if (result.isConfirmed) {
       var store = JSON.parse($("#sagemainstore").val());
+<<<<<<< HEAD
       store.hubSageFields.splice(index, 1);
       $(event).parents(".customRow").remove();
       $("#sagemainstore").val(JSON.stringify({ ...store }));
+=======
+      console.log(store)
+      store.hubSageFields.splice(index, 1);
+      $(event).parents(".customRow").remove()
+      $("#sagemainstore").val(JSON.stringify({ ...store }));
+      console.log("store is",store);
+>>>>>>> e1913ad32566aeb1b70775355419c791734e9e76
      // toastr.success("Mapped field is removed");
       saveDynamicOptionChanges()
     }
   });
 }
 
+<<<<<<< HEAD
 async function saveDynamicOptionChanges() {
   var store = JSON.parse($("#sagemainstore").val());
   console.log({ store });
   if (!store.hubSageFields || store.hubSageFields.length == 0) {
     return toastr.warning("Please provide Options for mapping");
+=======
+
+
+
+async function saveDynamicOptionChanges() {
+  var store = JSON.parse($("#sagemainstore").val());
+  console.log(store)
+  if (!store.hubSageFields || store.hubSageFields.length == 0) {    
+    alert("Error")
+    return toastr.success("Please provide Options for mapping");
+>>>>>>> e1913ad32566aeb1b70775355419c791734e9e76
   }
   let error = false;
   await Promise.all(
     store.hubSageFields.map((mp) => {
       if (!mp.preference) {
       //  toastr.warning("Preference must be defined for " + mp.hub);
+<<<<<<< HEAD
         Swal.fire("Syncing", "Preference must be defined for "+mp.hub, "info");
+=======
+        Swal.fire("Mapping", "Please Choose Prefrence for "+mp.hub, "info");
+>>>>>>> e1913ad32566aeb1b70775355419c791734e9e76
         return false;
       } else {
         return true;
@@ -211,6 +247,7 @@ async function saveDynamicOptionChanges() {
 
   if (error) return;
   let response = await ajaxRequest({
+<<<<<<< HEAD
     url: "/savehubsageoptions" + location.search,
     method: "POST",
     body: store,
@@ -226,6 +263,33 @@ async function saveDynamicOptionChanges() {
   //  toastr.error(typeof response.error == "string" ? response.error : "Saving HubSpot options failed");
   }
 }
+=======
+    url: "/saveProfileMapping" + location.search,
+    method: "POST",
+    body: store,
+  });
+  console.log(response)
+  if (response.success) {
+    Swal.fire("Mapping", response.data, "success");
+  } else {
+    Swal.fire("Mapping", typeof response.error == "string" ? response.error : "Saving HubSpot Mapping Options Failed", "error");
+  }
+}
+function transferFrom(event) {
+  var value = $(event).val();
+  modifysagemainstore({ name: "transferFrom", value });
+}
+function toogleHubSageFieldOption(event, data) {
+  data = JSON.parse(data);
+  console.log({ eeee: event.checked });
+  // $(event).prop("checked", event.checked);
+  modifysagemainstore({
+    name: data.hub + "_" + data.sage,
+    value: event.checked,
+  });
+}
+
+>>>>>>> e1913ad32566aeb1b70775355419c791734e9e76
 async function callSyncingRequest(query) {
   let url = "/api/start-syncing" + location.search;
   if (query) {

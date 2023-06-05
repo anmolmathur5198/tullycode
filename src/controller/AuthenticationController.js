@@ -9,19 +9,19 @@ const moment = require("moment");
 const { encryptData, decryptData, isTokenExpired } = require("../utils/util");
 const { tokens, hubsagefields, syncingtimelog, userregister } = require("../models");
 const ErrorResponse = require("../utils/ErrorRespnse");
-exports.hubspotAuthenticationApp = async (req, res, next) => {
 
+exports.hubspotAuthenticationApp = async (req, res, next) => {
   const authUrl =
     "https://app.hubspot.com/oauth/authorize" +
     `?client_id=${encodeURIComponent(process.env.HUBSPOT_CLIENT_ID)}` +
-    `&scope=automation%20business-intelligence%20oauth%20files%20e-commerce%20accounting%20crm.lists.read%20crm.objects.contacts.read%20crm.objects.contacts.write%20crm.objects.marketing_events.read%20crm.objects.marketing_events.write%20crm.schemas.custom.read%20crm.objects.custom.read%20crm.objects.custom.write%20crm.objects.companies.write%20crm.schemas.contacts.read%20crm.objects.feedback_submissions.read%20crm.lists.write%20crm.objects.companies.read%20crm.objects.deals.read%20crm.objects.deals.write%20crm.schemas.companies.read%20crm.schemas.companies.write%20crm.schemas.contacts.write%20crm.schemas.deals.read%20crm.schemas.deals.write%20crm.objects.owners.read%20crm.objects.quotes.write%20crm.objects.quotes.read%20crm.schemas.quotes.read%20crm.objects.line_items.read%20crm.objects.line_items.write%20crm.schemas.line_items.read%20crm.objects.goals.read` +
+    `&scope=automation%20business-intelligence%20oauth%20e-commerce%20crm.lists.read%20crm.objects.contacts.read%20crm.objects.contacts.write%20crm.objects.marketing_events.read%20crm.objects.marketing_events.write%20crm.schemas.custom.read%20crm.objects.custom.read%20crm.objects.custom.write%20crm.objects.companies.write%20crm.schemas.contacts.read%20crm.objects.feedback_submissions.read%20crm.lists.write%20crm.objects.companies.read%20crm.objects.deals.read%20crm.objects.deals.write%20crm.schemas.companies.read%20crm.schemas.companies.write%20crm.schemas.contacts.write%20crm.schemas.deals.read%20crm.schemas.deals.write%20crm.objects.owners.read%20crm.objects.quotes.write%20crm.objects.quotes.read%20crm.schemas.quotes.read%20crm.objects.line_items.read%20crm.objects.line_items.write%20crm.schemas.line_items.read%20crm.objects.goals.read` +
     `&redirect_uri=${encodeURIComponent(process.env.HUBSPOT_REDIRECT_URI)}`;
-
+  console.log(authUrl)
   return res.redirect(authUrl);
 };
+
 exports.hubspotauthcallback = async (req, res, next) => {
   try {
-
     if (req.query.code) {
 
       var options = {
@@ -40,12 +40,10 @@ exports.hubspotauthcallback = async (req, res, next) => {
       };
       request(options, async function (error, response) {
         if (error) throw new Error(error);
-
         let data = JSON.parse(response.body);
-
         let account_details = await axios.get(`https://api.hubapi.com/oauth/v1/access-tokens/${data.access_token}`);
-
         account_details = JSON.parse(JSON.stringify(account_details.data));
+
         let get_owner_account_data = await axios.get(
           `https://api.hubapi.com/crm/v3/owners/?email=${account_details.user}`,
           {
@@ -57,6 +55,7 @@ exports.hubspotauthcallback = async (req, res, next) => {
 
         if (get_owner_account_data.status == 200)
           get_owner_account_data = JSON.parse(JSON.stringify(get_owner_account_data.data.results[0]));
+
         account_details = {
           email: account_details.user,
           firstname: get_owner_account_data.firstName,
@@ -96,14 +95,12 @@ exports.hubspotauthcallback = async (req, res, next) => {
           { new: true, upsert: true }
         );
         console.log("sssss", updateOrCreateUser);
-
         if (updateOrCreateUser) {
-          tokens.findOneAndUpdate(
-            {
-              tokenname: "hoautk",
-              user_id: updateOrCreateUser._id,
-              platform: process.env.PLATFORM,
-            },
+          tokens.findOneAndUpdate({
+            tokenname: "hoautk",
+            user_id: updateOrCreateUser._id,
+            platform: process.env.PLATFORM,
+          },
             {
               tokenname: "hoautk",
               platform: process.env.PLATFORM,
@@ -116,7 +113,6 @@ exports.hubspotauthcallback = async (req, res, next) => {
             { new: true, upsert: true },
             (err, data) => {
               if (err) throw err;
-
             }
           );
         }
@@ -124,9 +120,15 @@ exports.hubspotauthcallback = async (req, res, next) => {
         let token = encryptData(updateOrCreateUser);
         res.cookie("hvrif", token);
         console.log(token);
-        let dyno_url = await zohoAuthentication(updateOrCreateUser._id);
 
-        res.redirect(dyno_url);
+        // let dyno_url = await zohoAuthentication(updateOrCreateUser._id);
+        // res.redirect(dyno_url);
+        let userr = await userregister.findOne({ _id: updateOrCreateUser._id }).lean();
+        let tokenn = encryptData(userr);
+        res.cookie("hvrif", encodeURIComponent(encryptData(tokenn)));
+        return res.redirect(
+          "/appdashboard" + `?hvrif=${encodeURIComponent(tokenn)}&plat=${encodeURIComponent(process.env.PLATFORM)}`
+        );
       });
     }
   } catch (error) {

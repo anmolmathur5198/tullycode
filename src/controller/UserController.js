@@ -113,8 +113,11 @@ exports.loginUserController = async (req, res) => {
       user = JSON.parse(JSON.stringify(user));
       if (user) {
         if (!user.password) {
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> e1913ad32566aeb1b70775355419c791734e9e76
         }
         let checkpassword = bcrypt.compareSync(data.password, user.password);
         // console.log(user);
@@ -232,7 +235,10 @@ exports.loginUserController = async (req, res) => {
   }
 };
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> e1913ad32566aeb1b70775355419c791734e9e76
 exports.changePassword = async (req, res) => {
   try {
     let user = req.dsuser;
@@ -651,3 +657,8 @@ exports.serversidelogs = async (req, res) => {
 
 
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> e1913ad32566aeb1b70775355419c791734e9e76

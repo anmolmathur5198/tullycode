@@ -1,6 +1,10 @@
 const express = require("express");
 const usercontroller = require("../controller/UserController");
 const authcontroller = require("../controller/AuthenticationController");
+<<<<<<< HEAD
+=======
+const TullyTramsController = new (require("../controller/TullyTramsController"))();
+>>>>>>> e1913ad32566aeb1b70775355419c791734e9e76
 const auth = require("../middleware/auth");
 const router = express.Router();
 //route operations
@@ -24,6 +28,12 @@ router.get("/populateData", auth.refreshTokens, usercontroller.serversidelogs);
 router.get("/appdashboard", auth.refreshTokens, usercontroller.appdashboard);
 
 
+<<<<<<< HEAD
+=======
+router.get("/contact", auth.refreshTokens, TullyTramsController.ProfileMappingdashboard);
+router.post("/saveProfileMapping", auth.verifyUserbyhvrif, TullyTramsController.saveProfileMapping);
+
+>>>>>>> e1913ad32566aeb1b70775355419c791734e9e76
 
 
 router.get("*", (req, res) => {
