@@ -160,7 +160,7 @@ exports.runCron = () => {
       }
       const { data } = await axios.get("http://tlt-dev01:8085/login", { params: body }, { 'headers': { "Content-Type": "application/json" } })
       const SessionID = data.result.SessionID;
-      const user_id = "647895e3c475dfb6a1049628"
+      const user_id = "647895e3c475dfb6a1049628";
       const response = await Tokens.findOneAndUpdate({ tokenname: "TramsSessionId" }, { $set: { tokenname: "TramsSessionId", platform: "tully", user_id, access_token: SessionID } }, { upsert: true });
       console.log("Token Updated in MongoDB, Token's Table:- ", response);
     }
@@ -169,6 +169,18 @@ exports.runCron = () => {
     }
 
   }).start();
+
+
+  // Get the profile data and saved into the MongoDB first & after then we have to store the data as well  as in the hubspot....
+
+  new CronJob("*/45 * * * * *", async () => {
+    console.log("hello world");
+
+
+  })
+
+
+
 
 };
 

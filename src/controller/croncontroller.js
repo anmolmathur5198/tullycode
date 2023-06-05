@@ -28,6 +28,7 @@ class CronController {
   constructor(user) {
     this.user = user;
   }
+
   async refreshHubSpotToken(requser) {
     try {
       // console.log("Refreshing HubSpot Token");
