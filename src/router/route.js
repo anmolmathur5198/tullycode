@@ -30,6 +30,13 @@ router.post("/saveProfileMapping", auth.verifyUserbyhvrif, TullyTramsController.
 
 
 
+
+// nischay code for set the webhook to get the hubspot contact inforamtion
+
+router.post("/getDatafromWebhook_Hubspot", TullyTramsController.getContactFromHubSpotThroughWebhook)
+
+
+
 router.get("*", (req, res) => {
   return res.status(404).send({ success: false, error: "NO Route Found" });
 });

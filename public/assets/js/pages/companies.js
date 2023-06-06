@@ -101,14 +101,14 @@ function add_custom_field_options() {
               <select onchange="selectCustomMappingField(this,'hub',${total_child_options})" style="height:auto" class="form-control custom-select bg-white p-3 hub_custom_field" name="hub_custom_field_${total_child_options}" id="hub_custom_field_${total_child_options}">
                 <option selected disabled>Choose HubSpot Mapping</option>
                ${hubspot_options.map((fr) => {
-                 return `<option class="text-capitalize" value="${fr}">${fr
-                   .replace(/(?:_| |\b)(\w)/g, function (fr, p1) {
-                     return " " + p1.toUpperCase();
-                   })
-                   .replace(/([-\?])(.)/g, function (w) {
-                     return w.toUpperCase().trim();
-                   })}</option>`;
-               })}
+    return `<option class="text-capitalize" value="${fr}">${fr
+      .replace(/(?:_| |\b)(\w)/g, function (fr, p1) {
+        return " " + p1.toUpperCase();
+      })
+      .replace(/([-\?])(.)/g, function (w) {
+        return w.toUpperCase().trim();
+      })}</option>`;
+  })}
               </select>
             </div>
           </div>
@@ -116,31 +116,31 @@ function add_custom_field_options() {
           <div class="col-lg-4">
              <div class="input-group mb-2">
               <select onchange="selectCustomMappingField(this,'sage',${total_child_options})" style="height:auto" class="form-control custom-select bg-white p-3 sage_custom_field" name="sage_custom_field_${total_child_options}" id="sage_custom_field_${total_child_options}">
-                <option selected disabled>Choose Myenergi Mapping</option>
+                <option selected disabled>Choose Trams Mapping</option>
                 ${sage_options.map((fr) => {
-                  var store = JSON.parse(
-                    $("#sagemainstore").val()
-                  ).hubSageFields;
-                  let fields = [];
-                  store.map((mp) => fields.push(mp.sage));
-                  if (fields.includes(fr)) {
-                    return `<option disabled class="text-capitalize" value="${fr}">${fr
-                      .replace(/(?:_| |\b)(\w)/g, function (fr, p1) {
-                        return " " + p1.toUpperCase();
-                      })
-                      .replace(/([-\?])(.)/g, function (w) {
-                        return w.toUpperCase().trim();
-                      })}</option>`;
-                  } else {
-                    return `<option class="text-capitalize" value="${fr}">${fr
-                      .replace(/(?:_| |\b)(\w)/g, function (fr, p1) {
-                        return " " + p1.toUpperCase();
-                      })
-                      .replace(/([-\?])(.)/g, function (w) {
-                        return w.toUpperCase().trim();
-                      })}</option>`;
-                  }
-                })}
+    var store = JSON.parse(
+      $("#sagemainstore").val()
+    ).hubSageFields;
+    let fields = [];
+    store.map((mp) => fields.push(mp.sage));
+    if (fields.includes(fr)) {
+      return `<option disabled class="text-capitalize" value="${fr}">${fr
+        .replace(/(?:_| |\b)(\w)/g, function (fr, p1) {
+          return " " + p1.toUpperCase();
+        })
+        .replace(/([-\?])(.)/g, function (w) {
+          return w.toUpperCase().trim();
+        })}</option>`;
+    } else {
+      return `<option class="text-capitalize" value="${fr}">${fr
+        .replace(/(?:_| |\b)(\w)/g, function (fr, p1) {
+          return " " + p1.toUpperCase();
+        })
+        .replace(/([-\?])(.)/g, function (w) {
+          return w.toUpperCase().trim();
+        })}</option>`;
+    }
+  })}
               </select>
                <div class="input-group-append">
                     <div class="input-group-text"><img src="/assets/img/crm2.png" alt=""></div>
@@ -538,7 +538,7 @@ function renderOptionsofhubsage() {
 
   // hide the div if all the lookup properties already present in HS account
   var hubspot_options = JSON.parse($("#hubspot_options").val());
-  console.log("deepak",hubspot_options)
+  console.log("deepak", hubspot_options)
   if (
     hubspot_options &&
     hubspot_options.length > 0 &&

@@ -91,14 +91,14 @@ function add_custom_field_options() {
             <select onchange="selectCustomMappingField(this,'hub',${total_child_options})" style="height:auto" class="form-control custom-select bg-white p-3 hub_custom_field" name="hub_custom_field_${total_child_options}" id="hub_custom_field_${total_child_options}">
               <option selected disabled>Choose HubSpot Mapping</option>
              ${hubspot_options.map((fr) => {
-               return `<option class="text-capitalize" value="${fr}">${fr
-                 .replace(/(?:_| |\b)(\w)/g, function (fr, p1) {
-                   return " " + p1.toUpperCase();
-                 })
-                 .replace(/([-\?])(.)/g, function (w) {
-                   return w.toUpperCase().trim();
-                 })}</option>`;
-             })}
+    return `<option class="text-capitalize" value="${fr}">${fr
+      .replace(/(?:_| |\b)(\w)/g, function (fr, p1) {
+        return " " + p1.toUpperCase();
+      })
+      .replace(/([-\?])(.)/g, function (w) {
+        return w.toUpperCase().trim();
+      })}</option>`;
+  })}
             </select>
           </div>
         </div>
@@ -106,33 +106,29 @@ function add_custom_field_options() {
         <div class="col-lg-4">
            <div class="input-group mb-2">
             <select onchange="selectCustomMappingField(this,'sage',${total_child_options})" style="height:auto" class="form-control custom-select bg-white p-3 sage_custom_field" name="sage_custom_field_${total_child_options}" id="sage_custom_field_${total_child_options}">
-<<<<<<< HEAD
-              <option selected disabled>Choose Myenergi Mapping</option>
-=======
               <option selected disabled>Choose Trams Mapping</option>
->>>>>>> e1913ad32566aeb1b70775355419c791734e9e76
               ${sage_options.map((fr) => {
-                var store = JSON.parse($("#sagemainstore").val()).hubSageFields;
-                let fields = [];
-                store.map((mp) => fields.push(mp.sage));
-                if (fields.includes(fr)) {
-                  return `<option disabled class="text-capitalize" value="${fr}">${fr
-                    .replace(/(?:_| |\b)(\w)/g, function (fr, p1) {
-                      return " " + p1.toUpperCase();
-                    })
-                    .replace(/([-\?])(.)/g, function (w) {
-                      return w.toUpperCase().trim();
-                    })}</option>`;
-                } else {
-                  return `<option class="text-capitalize" value="${fr}">${fr
-                    .replace(/(?:_| |\b)(\w)/g, function (fr, p1) {
-                      return " " + p1.toUpperCase();
-                    })
-                    .replace(/([-\?])(.)/g, function (w) {
-                      return w.toUpperCase().trim();
-                    })}</option>`;
-                }
-              })}
+    var store = JSON.parse($("#sagemainstore").val()).hubSageFields;
+    let fields = [];
+    store.map((mp) => fields.push(mp.sage));
+    if (fields.includes(fr)) {
+      return `<option disabled class="text-capitalize" value="${fr}">${fr
+        .replace(/(?:_| |\b)(\w)/g, function (fr, p1) {
+          return " " + p1.toUpperCase();
+        })
+        .replace(/([-\?])(.)/g, function (w) {
+          return w.toUpperCase().trim();
+        })}</option>`;
+    } else {
+      return `<option class="text-capitalize" value="${fr}">${fr
+        .replace(/(?:_| |\b)(\w)/g, function (fr, p1) {
+          return " " + p1.toUpperCase();
+        })
+        .replace(/([-\?])(.)/g, function (w) {
+          return w.toUpperCase().trim();
+        })}</option>`;
+    }
+  })}
             </select>
              <div class="input-group-append">
                   <div class="input-group-text"><img src="/assets/img/crm2.png" alt=""></div>
@@ -177,7 +173,7 @@ function toogleHubSageFieldOption(event, data) {
 }
 function remove_custom_field(event, index) {
 =======
-function remove_custom_field(event, index) { 
+function remove_custom_field(event, index) {
 >>>>>>> e1913ad32566aeb1b70775355419c791734e9e76
   Swal.fire({
     title: "Remove",
@@ -201,7 +197,7 @@ function remove_custom_field(event, index) {
       $("#sagemainstore").val(JSON.stringify({ ...store }));
       console.log("store is",store);
 >>>>>>> e1913ad32566aeb1b70775355419c791734e9e76
-     // toastr.success("Mapped field is removed");
+      // toastr.success("Mapped field is removed");
       saveDynamicOptionChanges()
     }
   });
@@ -220,7 +216,7 @@ async function saveDynamicOptionChanges() {
 async function saveDynamicOptionChanges() {
   var store = JSON.parse($("#sagemainstore").val());
   console.log(store)
-  if (!store.hubSageFields || store.hubSageFields.length == 0) {    
+  if (!store.hubSageFields || store.hubSageFields.length == 0) {
     alert("Error")
     return toastr.success("Please provide Options for mapping");
 >>>>>>> e1913ad32566aeb1b70775355419c791734e9e76
@@ -229,9 +225,9 @@ async function saveDynamicOptionChanges() {
   await Promise.all(
     store.hubSageFields.map((mp) => {
       if (!mp.preference) {
-      //  toastr.warning("Preference must be defined for " + mp.hub);
+        //  toastr.warning("Preference must be defined for " + mp.hub);
 <<<<<<< HEAD
-        Swal.fire("Syncing", "Preference must be defined for "+mp.hub, "info");
+        Swal.fire("Syncing", "Preference must be defined for " + mp.hub, "info");
 =======
         Swal.fire("Mapping", "Please Choose Prefrence for "+mp.hub, "info");
 >>>>>>> e1913ad32566aeb1b70775355419c791734e9e76
@@ -253,14 +249,14 @@ async function saveDynamicOptionChanges() {
     body: store,
   });
   if (response.success) {
-   
-    
+
+
     Swal.fire("Syncing", response.data, "success");
-  
+
   } else {
 
     Swal.fire("Syncing", typeof response.error == "string" ? response.error : "Saving HubSpot options failed", "error");
-  //  toastr.error(typeof response.error == "string" ? response.error : "Saving HubSpot options failed");
+    //  toastr.error(typeof response.error == "string" ? response.error : "Saving HubSpot options failed");
   }
 }
 =======
@@ -596,17 +592,17 @@ function renderOptionsofhubsage() {
       })
     );
   }
-// hide the div if all the lookup properties already present in HS account
-   var hubspot_options = JSON.parse($("#hubspot_options").val());
-   if (
-     hubspot_options &&
-     hubspot_options.length > 0 &&
-     hubspot_options.includes("mercury_contact_id")
-   ) {
-     console.log({ hubspot_options });
-     $(".lookupfeildscheck").hide();
-   } 
-  
+  // hide the div if all the lookup properties already present in HS account
+  var hubspot_options = JSON.parse($("#hubspot_options").val());
+  if (
+    hubspot_options &&
+    hubspot_options.length > 0 &&
+    hubspot_options.includes("mercury_contact_id")
+  ) {
+    console.log({ hubspot_options });
+    $(".lookupfeildscheck").hide();
+  }
+
 }
 
 function autoSyncing() {
@@ -633,9 +629,9 @@ function autoSyncing() {
   });
 }
 
-async function GenerateLookupProperties(){
+async function GenerateLookupProperties() {
 
-    Swal.fire({
+  Swal.fire({
     title: "Create lookUp Properties",
     text: "Are you sure to create new lookup properties",
     icon: "warning",
@@ -645,44 +641,44 @@ async function GenerateLookupProperties(){
     confirmButtonText: "Yes, update it!",
   }).then(async (result) => {
     if (result.isConfirmed) {
-  
-     let CreateLookupProperties = await ajaxRequest({
-       url: "/createLookupProperties" + location.search,
-       method: "GET",
-     
-     });
-     if (
-       CreateLookupProperties.success &&
-       CreateLookupProperties.propertyexist
-     ) {
-         Swal.fire(
-           "Properties",
-           "new  properties created successfully",
-           "success"
-         );
 
-     } else if (
-       CreateLookupProperties.success &&
-       !CreateLookupProperties.propertyexist
-     ) {
-       Swal.fire(
-         "Properties",
-         "All Required properties Available",
-         "info"
-       );
-     } else if (
-       !CreateLookupProperties.success &&
-       !CreateLookupProperties.propertyexist
-     ) {
-       Swal.fire(
-         "Properties",
-         "failed to created properties",
-         "error"
-       );
-     }
-     else{
-       Swal.fire("Properties", "failed to created properties", "error");
-     }
+      let CreateLookupProperties = await ajaxRequest({
+        url: "/createLookupProperties" + location.search,
+        method: "GET",
+
+      });
+      if (
+        CreateLookupProperties.success &&
+        CreateLookupProperties.propertyexist
+      ) {
+        Swal.fire(
+          "Properties",
+          "new  properties created successfully",
+          "success"
+        );
+
+      } else if (
+        CreateLookupProperties.success &&
+        !CreateLookupProperties.propertyexist
+      ) {
+        Swal.fire(
+          "Properties",
+          "All Required properties Available",
+          "info"
+        );
+      } else if (
+        !CreateLookupProperties.success &&
+        !CreateLookupProperties.propertyexist
+      ) {
+        Swal.fire(
+          "Properties",
+          "failed to created properties",
+          "error"
+        );
+      }
+      else {
+        Swal.fire("Properties", "failed to created properties", "error");
+      }
     }
-    });
+  });
 }

@@ -55,7 +55,7 @@
                                         <label for="fromFilter">From</label>
                                         <select class="form-control" id="fromFilter">
                                             <option value="">All</option>
-                                            <option value="Myenergi">Myenergi</option>
+                                            <option value="Trams">Trams</option>
                                             <option value="HubSpot">HubSpot</option>
                                         </select>
                                     </div>
@@ -125,7 +125,7 @@
     </div>
 
     <%- include('footer') %>
-       
+
         <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
         <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
         <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script> -->
@@ -134,7 +134,7 @@
         <script>
             $(document).ready(function () {
                 $('#logTable').DataTable();
-                
+
             });
 
         </script>
@@ -166,7 +166,7 @@
                                 row.append($('<td>').text(item.from));
                                 row.append($('<td>').text(moment(item.createdAt).format('MM/DD/YYYY HH:mm:ss')));
                                 $('#logTable tbody').append(row);
-                                
+
                             });
                         }
                     });

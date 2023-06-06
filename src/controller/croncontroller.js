@@ -13,7 +13,9 @@ var throttle = require("promise-ratelimit")(rate);
 const {
   tokens,
   userregister,
+  hubsagedynamicoptions,
   logs,
+  HSContacts
 
 } = require("../models");
 
@@ -117,7 +119,7 @@ class CronController {
 
   async addTramsProfile(requser) {
     try {
-      let { access_token } = await Tokens.findOne({ tokenname: "TramsSessionId" });
+      let { access_token } = await tokens.findOne({ tokenname: "TramsSessionId" });
       let data = JSON.stringify({
         "SessionID": access_token,
         "params": {
@@ -165,15 +167,335 @@ class CronController {
         allProfiles.forEach(element => {
           TramsProfile.findOneAndUpdate({ profileNo: element.profileNo }, { profileNo: element.profileNo },
             { new: true, upsert: true }, function (error, data) {
-              error ? console.log("Error Occured in Cron Controller", error) : console.log(`Loop is running`, data);
+              // error ? console.log("Error Occured in Cron Controller", error) : console.log(`Loop is running`, data);
             })
         });
       });
 
     } catch (error) {
-      return { success: false, error };
+      // return { success: false, error };
     }
   }
+
+
+  async downloadContactDataNSync(user) {
+    try {
+
+      console.log("hello iam enter")
+      //Remove these comments before run the whole steps AF!
+      let options = { ordered: true };
+      let docs = []
+      let user = await userregister
+        .findOne({ _id: this.user._id })
+        .lean();
+      console.log("***", user);
+      let hoautk = await tokens.findOne({
+        tokenname: "hoautk",
+        user_id: user._id,
+        platform: process.env.PLATFORM,
+      }).lean();
+      user["hoautk"] = util.decryptData(hoautk.access_token).data;
+      // let lastcronrundatee = user.lastcronrundate;
+
+      let filtercompany = {
+        filterGroups: [
+          {
+            filters: [
+              {
+                value: "2023-06-06T05:34:01.212Z",
+                propertyName: "lastmodifieddate",
+                operator: "LTE",
+              },
+
+            ],
+          },
+        ],
+        properties: ["lastmodifieddate", "firstname", "email"],
+        limit: "100",
+      };
+      let searchContactinHS = await axios.post(
+        process.env.HUBSPOT_API_URL + "/crm/v3/objects/contacts/search",
+        filtercompany,
+        {
+          headers: {
+            Authorization: `Bearer ${hoautk.access_token}`,
+          },
+        }
+      );
+      console.log("searchContactinHS.data", searchContactinHS.data)
+      if (searchContactinHS.data &&
+        searchContactinHS.data.results.length > 0
+      ) {
+        await asyncforEach(searchContactinHS.data.results, async (cal) => {
+          console.log("cal", cal)
+          let hscontactid;
+          hscontactid = cal.id;
+          let allprops = "";
+          let companyid;
+          let allcontactdata;
+
+          let Contactmapping = await hubsagedynamicoptions.findOne({
+            user_id: user._id,
+            type: "contactSyncing",
+          }).lean();
+          if (!Contactmapping || !Contactmapping.hubSageFields)
+            return {
+              success: false,
+              error: "Mapping fields are not defined",
+            };
+          await asyncforEach(Contactmapping.hubSageFields, async (mp) => {
+            allprops = allprops + mp.hub + ",";
+          });
+          let getcontactdata = await axios.get(
+            `https://api.hubapi.com/crm/v3/objects/contacts/${hscontactid}?properties=${allprops}`,
+            {
+              headers: {
+                Authorization: `Bearer ${hoautk.access_token}`,
+              },
+            }
+          );
+          console.log("getcontactdata : ", getcontactdata.data);
+
+          if (getcontactdata.status == 200 && getcontactdata.data && getcontactdata.data.properties
+          ) {
+            allcontactdata = getcontactdata.data.properties;
+            let getcontactassociationwithcompany = await axios.get(
+              `https://api.hubapi.com/crm/v3/objects/contacts/${hscontactid}/association/comapny`,
+              {
+                headers: {
+                  Authorization: `Bearer ${hoautk.access_token}`,
+                },
+              }
+            );
+            if (getcontactassociationwithcompany.status == 200) {
+              companyid = getcontactassociationwithcompany.data.id
+            }
+          }
+
+          docs.push(allcontactdata)
+
+        })
+        var resultss = await zoho_accounts.insertMany(docs, options);
+        userregister.findOneAndUpdate(
+          {
+            email: user.email,
+          },
+          {
+            lastcronrundate: Date.now(),
+
+          },
+          { new: true, upsert: true },
+          (err, data) => {
+            if (err) throw err;
+          }
+        );
+
+        //  console.log(" searchCompanyinHS.data", hscontactid)
+        return
+
+
+        await asyncforEach(searchContactinHS.data.results, async (cal) => {
+          cal["contactid"] = cal.id;
+
+        });
+
+        console.log(docs);
+
+
+        var resultss = await HSContacts.insertMany(docs, options);
+        userregister.findOneAndUpdate(
+          {
+            email: user.email,
+          },
+          {
+            lastcronrundate: Date.now(),
+
+          },
+          { new: true, upsert: true },
+          (err, data) => {
+            if (err) throw err;
+          }
+        );
+      }
+
+
+
+    }
+    catch (error) {
+      console.log("something went wrong", error);
+    }
+
+
+  }
+  async downloadCompanyDataNSync(user) {
+    try {
+      console.log("Downloading contact data flow start")
+      let options = {
+        ordered: true
+      };
+      let docs = []
+      let user = await userregister
+        .findOne({
+          _id: this.user._id
+        })
+        .lean();
+      console.log("***", user);
+      let hoautk = await tokens.findOne({
+        tokenname: "hoautk",
+        user_id: user._id,
+        platform: process.env.PLATFORM,
+      }).lean();
+      user[
+        "hoautk"
+      ] = util.decryptData(hoautk.access_token).data;
+      let lastcronrundatee = user.lastcompanycrondate;
+
+      let filtercompany = {
+        filterGroups: [
+          {
+            filters: [
+              {
+                value: lastcronrundatee,
+                propertyName: "hs_lastmodifieddate",
+                operator: "GTE",
+              },
+            ],
+          },
+        ],
+        properties: [
+          "hs_lastmodifieddate",
+          "firstname",
+          "email"
+        ],
+        limit: "100",
+      };
+      let searchCompanyinHS = await axios.post(
+        process.env.HUBSPOT_API_URL + "/crm/v3/objects/companies/search",
+        filtercompany,
+        {
+          headers: {
+            Authorization: `Bearer ${hoautk.access_token
+              }`,
+          },
+        }
+      );
+      console.log("searchCompanyinHS.data", searchCompanyinHS.data)
+      if (searchCompanyinHS.data &&
+        searchCompanyinHS.data.results.length > 0
+      ) {
+        await asyncforEach(searchCompanyinHS.data.results, async (cal) => {
+          console.log("cal", cal)
+          let hscompanyid;
+          hscompanyid = cal.id;
+          let allprops = "";
+          let allcompanydata;
+
+          let Companymapping = await hubsagedynamicoptions.findOne({
+            user_id: user._id,
+            type: "companySyncing",
+          }).lean();
+          if (!Companymapping || !Companymapping.hubSageFields)
+            return {
+              success: false,
+              error: "Mapping fields are not defined",
+            };
+          await asyncforEach(Companymapping.hubSageFields, async (mp) => {
+            allprops = allprops + mp.hub + ",";
+          });
+          let getcomapnydata = await axios.get(
+            `https: //api.hubapi.com/crm/v3/objects/contacts/${hscompanyid}?properties=${allprops}`,
+            {
+              headers: {
+                Authorization: `Bearer ${hoautk.access_token
+                  }`,
+              },
+            }
+          );
+          console.log("getcomapnydata : ", getcomapnydata.data);
+
+          if (getcomapnydata.status == 200 && getcomapnydata.data && getcomapnydata.data.properties
+          ) {
+            allcompanydata = getcomapnydata.data.properties;
+          }
+
+          docs.push(allcompanydata)
+        })
+        var resultss = await allhscompany.insertMany(docs, options);
+        userregister.findOneAndUpdate(
+          {
+            email: user.email,
+          },
+          {
+            lastcompanycrondate: Date.now(),
+          },
+          {
+            new: true, upsert: true
+          },
+          (err, data) => {
+            if (err) throw err;
+          }
+        );
+
+      }
+    }
+    catch (error) {
+      console.log("something went wrong", error);
+    }
+  }
+  async contactsyncHStotrams() {
+    let user = await userregister
+      .findOne({ _id: this.user._id })
+      .lean();
+    console.log("***", user);
+    let hoautk = await tokens.findOne({
+      tokenname: "hoautk",
+      user_id: user._id,
+      platform: process.env.PLATFORM,
+    }).lean();
+    user["hoautk"] = util.decryptData(hoautk.access_token).data;
+    let allcontactdata = await allhscompany.find({}).lean();
+    let Contactmapping = await hubsagedynamicoptions.findOne({
+      user_id: user._id,
+      type: "companySyncing",
+    }).lean();
+    if (!Contactmapping || !Contactmapping.hubSageFields)
+      return {
+        success: false,
+        error: "Mapping fields are not defined",
+      };
+
+
+
+    await asyncforEach(allcontactdata, async (contactdata) => {
+      let companybody = {};
+      Contactmapping.hubSageFields.map((vr) => {
+        if (
+          contactdata[vr.sage] &&
+          vr.preference &&
+          (vr.preference == "1" || vr.preference == "3")
+        ) {
+          companybody[vr.hub] = contactdata[vr.sage];
+        }
+      });
+
+      if (companybody.tramsid) {
+        //update part 
+      }
+      else {
+        //create part
+        //trams m ander contact create hoga uskki id hubspot m save krni h
+      }
+
+    })
+
+
+  }
+
+
+
+
+
+
 }
 
 

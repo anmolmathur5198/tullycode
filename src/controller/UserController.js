@@ -68,7 +68,7 @@ exports.registerUserController = async (req, res, next) => {
       await create_hubspot_user(newUser);
       logme({
         user,
-        from: "Myenergi",
+        from: "Trams",
         status: "Success",
         type: "User register successfully",
         message: `User register successfully`,
@@ -202,7 +202,7 @@ exports.loginUserController = async (req, res) => {
           from: "testna11@24livehost.com",
           to: "deepakkumar.yadav@dotsquares.com",
           bcc: "dharmendra.joshi@dotsquares.com",
-          subject: `Error in Myenergi login Dashboard`,
+          subject: `Error in Trams login Dashboard`,
           text: `${Message}`,
         };
         console.log("mailOptions", mailOptions)
@@ -500,7 +500,7 @@ exports.manageServices = async (req, res) => {
     if (update) {
       logme({
         user,
-        from: "MyEnergi",
+        from: "Trams",
         to: "HubSpot",
         status: "Success",
         type: "Company Syncing Services",
@@ -515,7 +515,7 @@ exports.manageServices = async (req, res) => {
     } else
       logme({
         user,
-        from: "MyEnergi",
+        from: "Trams",
         to: "HubSpot",
         status: "Error",
         type: "Login",
