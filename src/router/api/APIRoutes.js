@@ -8,7 +8,7 @@ router.get("/account_details", auth.refreshTokens, authcontroller.getHubSpotAcco
 router.get("/auth/hubspot/callback", authcontroller.hubspotauthcallback);
 
 router.get("*", (req, res) => {
-  return res.status(404).send({ success: false, error: "NOo Route Found" });
+  return res.status(404).send({ success: false, error: "Noo Route Found" });
 });
 
 module.exports = router;

@@ -41,7 +41,7 @@
                 <div class="d-flex justify-content-end align-items-center">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a onclick="location.href='/appdashboard'+location.search">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Contact Syncing</li>
+                        <li class="breadcrumb-item active">Comm (Communication) Syncing</li>
                     </ol>
                 </div>
             </div>
@@ -84,8 +84,7 @@
                             <!-- Store Input Options -->
                             <input type="hidden" id="hubspot_options" value="<%= JSON.stringify(options) %>" />
                             <input type="hidden" id="sage_options" value="<%= JSON.stringify(sageFields) %>" />
-                            <input type="hidden" id="optionsofhubsage"
-                                value="<%= JSON.stringify(store.optionsofhubsage) %>" />
+                            <input type="hidden" id="optionsofhubsage" value="<%= JSON.stringify(store.optionsofhubsage) %>" />
                             <!-- End Store Input Option -->
                             <!-- Staring Mapping HubSpot Fields -->
                            
@@ -300,6 +299,6 @@
             showAlertMessage("success", "Custom object created successfully.");
         }
     </script>
-    <script src="/assets/js/pages/sagemain.js"></script>
+    <script src="/assets/js/pages/customObjectComm.js"></script>
 
     <%- include('footer') %>

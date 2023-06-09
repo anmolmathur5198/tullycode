@@ -116,7 +116,7 @@ function add_custom_field_options() {
           <div class="col-lg-4">
              <div class="input-group mb-2">
               <select onchange="selectCustomMappingField(this,'sage',${total_child_options})" style="height:auto" class="form-control custom-select bg-white p-3 sage_custom_field" name="sage_custom_field_${total_child_options}" id="sage_custom_field_${total_child_options}">
-                <option selected disabled>Choose Myenergi Mapping</option>
+                <option selected disabled>Choose Trams Mapping</option>
                 ${sage_options.map((fr) => {
                   var store = JSON.parse(
                     $("#sagemainstore").val()

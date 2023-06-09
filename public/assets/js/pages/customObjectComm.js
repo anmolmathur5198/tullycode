@@ -189,7 +189,6 @@ async function saveDynamicOptionChanges() {
   await Promise.all(
     store.hubSageFields.map((mp) => {
       if (!mp.preference) {
-      //  toastr.warning("Preference must be defined for " + mp.hub);
         Swal.fire("Mapping", "Please Choose Prefrence for "+mp.hub, "info");
         return false;
       } else {
@@ -197,13 +196,13 @@ async function saveDynamicOptionChanges() {
       }
     })
   ).then((data) => {
-    console.log(data.toString(), /false/gi.test(data.toString()));
+    console.log(">>>>>>>>>>>>>",data.toString(), /false/gi.test(data.toString()));
     if (/false/gi.test(data.toString())) error = true;
   });
 
   if (error) return;
   let response = await ajaxRequest({
-    url: "/saveProfileMapping" + location.search,
+    url: "/saveCommMappingFields" + location.search,
     method: "POST",
     body: store,
   });
@@ -475,7 +474,6 @@ async function startSyncing() {
 
 function renderOptionsofhubsage() {
   var options = JSON.parse($("#optionsofhubsage").val());
-
   if (!options) {
     options = [];
   }

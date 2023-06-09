@@ -14,7 +14,7 @@ exports.hubspotAuthenticationApp = async (req, res, next) => {
     const authUrl =
       "https://app.hubspot.com/oauth/authorize" +
       `?client_id=${encodeURIComponent(process.env.HUBSPOT_CLIENT_ID)}` +
-      `&scope=automation%20business-intelligence%20oauth%20e-commerce%20crm.lists.read%20crm.objects.contacts.read%20crm.objects.contacts.write%20crm.objects.marketing_events.read%20crm.objects.marketing_events.write%20crm.schemas.custom.read%20crm.objects.custom.read%20crm.objects.custom.write%20crm.objects.companies.write%20crm.schemas.contacts.read%20crm.objects.feedback_submissions.read%20crm.lists.write%20crm.objects.companies.read%20crm.objects.deals.read%20crm.objects.deals.write%20crm.schemas.companies.read%20crm.schemas.companies.write%20crm.schemas.contacts.write%20crm.schemas.deals.read%20crm.schemas.deals.write%20crm.objects.owners.read%20crm.objects.quotes.write%20crm.objects.quotes.read%20crm.schemas.quotes.read%20crm.objects.line_items.read%20crm.objects.line_items.write%20crm.schemas.line_items.read%20crm.objects.goals.read` +
+      `&scope=oauth%20crm.lists.read%20crm.objects.contacts.read%20crm.objects.contacts.write%20crm.schemas.custom.read%20crm.objects.custom.read%20crm.objects.custom.write%20crm.objects.companies.write%20crm.schemas.contacts.read%20crm.lists.write%20crm.objects.companies.read%20crm.objects.deals.read%20crm.objects.deals.write%20crm.schemas.companies.read%20crm.schemas.companies.write%20crm.schemas.contacts.write%20crm.schemas.deals.read%20crm.schemas.deals.write%20crm.objects.owners.read%20crm.objects.line_items.read%20crm.objects.line_items.write%20crm.schemas.line_items.read` +
       `&redirect_uri=${encodeURIComponent(process.env.HUBSPOT_REDIRECT_URI)}`;
     console.log(authUrl)
     return res.redirect(authUrl);
@@ -23,6 +23,8 @@ exports.hubspotAuthenticationApp = async (req, res, next) => {
 exports.hubspotauthcallback = async (req, res, next) => {
   try {
     if (req.query.code) {
+
+      console.log(req.query.code)
     
       var options = {
         method: "POST",
@@ -41,6 +43,7 @@ exports.hubspotauthcallback = async (req, res, next) => {
       request(options, async function (error, response) {
         if (error) throw new Error(error);
         let data = JSON.parse(response.body);
+
         let account_details = await axios.get(`https://api.hubapi.com/oauth/v1/access-tokens/${data.access_token}`);
         account_details = JSON.parse(JSON.stringify(account_details.data));
          
@@ -132,7 +135,7 @@ exports.hubspotauthcallback = async (req, res, next) => {
       });
     }
   } catch (error) {
-    console.log(error);
+    console.log(error.response.data);
     return res.send({ success: false, error });
   }
 };

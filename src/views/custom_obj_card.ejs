@@ -35,13 +35,13 @@
     <div class="container-fluid">
         <div class="row page-titles">
             <div class="col-md-5 align-self-center">
-                <h4 class="text-themecolor">Contact Syncing</h4>
+                <h4 class="text-themecolor">Card Syncing</h4>
             </div>
             <div class="col-md-7 align-self-center text-right">
                 <div class="d-flex justify-content-end align-items-center">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a onclick="location.href='/appdashboard'+location.search">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Contact Syncing</li>
+                        <li class="breadcrumb-item active">Card Syncing</li>
                     </ol>
                 </div>
             </div>
@@ -52,7 +52,7 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Webhook to Sync Contacts From HubSpot To Trams</h5>
+                        <h5 class="card-title">Webhook to Sync Card From Trasm To HS</h5>
                         
                         <div class="row">
                             <input type="hidden" id="sagemainstore" name="radio-group">
@@ -64,28 +64,23 @@
         &nbsp;&nbsp;1. Use this Webhook in Contact based workflow. <br>
         &nbsp;&nbsp;2. Select a Trigger point to trigger this workflow.<br>
         </p>
-                           
-
                         </div>
                     </div>
                 </div>
             </div>
             <!-- Column -->
         </div>
-
         <div class="row">
             <!-- Column -->
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title" style="text-align: center;margin-bottom: 25px;">Feild Mapping</h5>
-                        
                         <div class="default_block field-mapping">
                             <!-- Store Input Options -->
                             <input type="hidden" id="hubspot_options" value="<%= JSON.stringify(options) %>" />
                             <input type="hidden" id="sage_options" value="<%= JSON.stringify(sageFields) %>" />
-                            <input type="hidden" id="optionsofhubsage"
-                                value="<%= JSON.stringify(store.optionsofhubsage) %>" />
+                            <input type="hidden" id="optionsofhubsage" value="<%= JSON.stringify(store.optionsofhubsage) %>" />
                             <!-- End Store Input Option -->
                             <!-- Staring Mapping HubSpot Fields -->
                            
@@ -102,7 +97,7 @@
                                                 </div>
                                                 <input type="text" style="padding: 27px;" class="form-control" readonly placeholder="<%= mp.hub %>"
                                                     value="<%= mp.hub %>">
-                                            </div>
+                                                </div>
                                         </div>
                                         <div class=" col-lg-1 text-center mt-2"><img src="/assets/img/direc.png" alt="">
                                         </div>
@@ -300,6 +295,6 @@
             showAlertMessage("success", "Custom object created successfully.");
         }
     </script>
-    <script src="/assets/js/pages/sagemain.js"></script>
+    <script src="/assets/js/pages/customObjectCard.js"></script>
 
     <%- include('footer') %>

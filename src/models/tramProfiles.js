@@ -5,6 +5,10 @@ const TramsProfileSchema = new mongoose.Schema(
     profileNo: {
       type: Number,
       required: true,
+    },
+    pending: {
+      type: Boolean,
+      required: true,
     }
   },
   { timestamps: true, versionKey: false }

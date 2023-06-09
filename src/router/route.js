@@ -25,11 +25,24 @@ router.get("/populateData", auth.refreshTokens, usercontroller.serversidelogs);
 router.get("/appdashboard", auth.refreshTokens, usercontroller.appdashboard);
 
 
+
+// custome object mapping dashboard showing code
 router.get("/contact", auth.refreshTokens, TullyTramsController.ProfileMappingdashboard);
+router.get("/custom_obj_comm",auth.refreshTokens, TullyTramsController.commCustomObjectMappingDashboard)
+router.get("/custom_obj_address",auth.refreshTokens, TullyTramsController.addressCustomObjectMappingDashboard)
+router.get("/custom_obj_card",auth.refreshTokens, TullyTramsController.cardCustomObjectMappingDashboard)
+
+
+
+// for saving respective mapping dashboard
 router.post("/saveProfileMapping", auth.verifyUserbyhvrif, TullyTramsController.saveProfileMapping);
+router.post("/saveCommMappingFields", auth.verifyUserbyhvrif, TullyTramsController.saveCommMappingFields);
+router.post("/saveAddressMappingFields", auth.verifyUserbyhvrif, TullyTramsController.saveAddressMappingFields);
+router.post("/saveCardMappingFields", auth.verifyUserbyhvrif, TullyTramsController.saveCardMappingFields);
 
 
-
+router.get("/SyncTramProfileToHubspot",TullyTramsController.SyncTramProfileToHubspot);
+router.post("/getDatafromWebhook_Hubspot", TullyTramsController.getContactFromHubSpotThroughWebhook)
 router.get("*", (req, res) => {
   return res.status(404).send({ success: false, error: "NO Route Found" });
 });

@@ -9,24 +9,20 @@ const croncontroller = require("../controller/croncontroller");
 
 exports.refreshTokens = async (req, res, next) => {
   req.dsuser = {};
-  
   req.session.flash = {};
-  
-    // console.log("Ds365 Token Working");
-    const hubToken = await this.refreshHubSpotToken(req, res);
-    if (hubToken.success) {
-      console.log("HubSpot Token Working");
-      next();
-    } else {
-      // console.log(uttil(hubToken));
-      return res.redirect("/api/auth/hubspot");
-    }
- 
- 
+  const hubToken = await this.refreshHubSpotToken(req, res);
+  if (hubToken.success) {
+    console.log("HubSpot Token Working");
+    next();
+  } else {
+    // console.log(uttil(hubToken));
+    return res.redirect("/api/auth/hubspot");
+  }
+
+
 };
 exports.refreshHubSpotToken = refreshHubSpotToken = async (req) => {
   try {
-   //  console.log("Refreshing HubSpot Token",decryptData(req.query.hvrif));
     global.user = decryptData(req.query.hvrif);
     let getUser
     if (global.user && global.user.email) {
@@ -83,18 +79,15 @@ exports.refreshHubSpotToken = refreshHubSpotToken = async (req) => {
               tokenname: "hoautk",
               user_id: global.user._id,
               platform: process.env.PLATFORM,
-              access_token:  result.data.access_token ,
-              refresh_token:  result.data.refresh_token ,
+              access_token: result.data.access_token,
+              refresh_token: result.data.refresh_token,
               access_token_expire_in: result.data.expires_in,
               refresh_token_expire_in: result.data.expires_in,
             },
             { new: true, upsert: true },
             (err, data) => {
               if (err) throw { success: false, error: err };
-              // console.log({ token: data });
-              // console.log({ htoken_access_token: result.data.access_token });
               req.dsuser["hoautk"] = result.data.access_token;
-              // console.log("HubSpot Token Refreshed");
             }
           );
           return { success: true, data: result.data };
@@ -148,11 +141,11 @@ exports.verifyUserbyhvrif = verifyUserbyhvrif = async (req, res, next) => {
 exports.verifyUserandRefreshTokensforTriggeringDealsMiddleware = async (req, res, next) => {
   try {
     req.dsuser = {};
-console.log(req.params)
-console.log(req.query)
-    
+    console.log(req.params)
+    console.log(req.query)
+
     if (!req.params.id) return res.send({ success: false, error: "Contact Id is not defined in the query" });
-  // if (!req.query.plat) return res.send({ success: false, error: "User Platform is not defined in the query" });
+    // if (!req.query.plat) return res.send({ success: false, error: "User Platform is not defined in the query" });
     // if (!req.params.portalId) return res.send({ success: false, error: "HubSpot portalId is not defined in the query" });
     // if (!req.params.dealconnectionid) return res.send({ success: false, error: "HubSpot Deal connection id is not defined in the query" });
     let user = await userregister.findOne({ _id: req.params.id }).lean();
@@ -168,18 +161,18 @@ console.log(req.query)
     /** End services validation  */
 
     console.log("Hey All validation ssuccess")
-   
+
     let hoautk = await tokens
       .findOne({
         tokenname: "hoautk",
         user_id: req.params.id,
-      //  platform: req.query.plat,
+        //  platform: req.query.plat,
       })
       .lean();
-   
+
     if (!hoautk) return res.send({ success: false, error: "HubSpot Token not found" });
     req.dsuser = user;
-    if (hoautk ) {
+    if (hoautk) {
       let isExpiredhoautk = isTokenExpired(hoautk);
       if (isExpiredhoautk) {
         var data = qs.stringify({
@@ -203,14 +196,14 @@ console.log(req.query)
               {
                 tokenname: "hoautk",
                 user_id: req.params.id,
-              //  platform: req.query.plat,
+                //  platform: req.query.plat,
               },
               {
                 tokenname: "hoautk",
                 user_id: req.params.id,
                 platform: req.query.plat,
-                access_token:  result.data.access_token ,
-                refresh_token:  result.data.refresh_token ,
+                access_token: result.data.access_token,
+                refresh_token: result.data.refresh_token,
                 access_token_expire_in: result.data.expires_in,
                 refresh_token_expire_in: result.data.expires_in,
               },
@@ -225,7 +218,7 @@ console.log(req.query)
         req.dsuser["hoautk"] = hoautk.access_token;
         next();
       }
-    
+
     } else {
       return res.status(403).send({ success: false, error: "Tokens not found" });
     }
@@ -254,7 +247,7 @@ function removecallCounts(call) {
   return getCallCount(call);
 }
 
-function rejectParallelCalls(contactDetail,req){
+function rejectParallelCalls(contactDetail, req) {
   let cr = createcallCounts({
     name: req.path.replace(/\//g, "_") + contactDetail.Value,
     method: req.method,
@@ -262,7 +255,7 @@ function rejectParallelCalls(contactDetail,req){
   // console.log(req.method, "Call COUnt "+ callCount);
   if (cr > 1) {
     console.log(
-      "Rejecting " +req.path +" Request for Multiple API Call " + cr
+      "Rejecting " + req.path + " Request for Multiple API Call " + cr
     );
     setTimeout(() => {
       removecallCounts({
@@ -271,9 +264,9 @@ function rejectParallelCalls(contactDetail,req){
       });
       // console.log("Now Hit Again")
     }, 10000);
-    return {success:false}
-  }else{
-    return {success:true}
+    return { success: false }
+  } else {
+    return { success: true }
   }
 }
 
@@ -287,21 +280,21 @@ exports.checksyncstatusfromDStoHS = async (req, res, next) => {
     let user = await userregister
       .findOne({ email: process.env.MAIN_PLATFORM_ID })
       .lean();
-       console.log("Syncing Status ", user.AllSyncingStatus,"M_HS Call Count "+i);
-      
+    console.log("Syncing Status ", user.AllSyncingStatus, "M_HS Call Count " + i);
+
     if (!user.AllSyncingStatus)
       return res.send({
         success: false,
         error: "Services are currently off",
       });
     await throttle();
-    if(user){
+    if (user) {
       let cron = new croncontroller(user);
       console.log("hell")
       cron.refreshTokens(user).then((data) => {
-        console.log('hell1',data)
+        console.log('hell1', data)
         next();
-      }).catch((err)=>{console.log("RefreshTokenError",err)})
+      }).catch((err) => { console.log("RefreshTokenError", err) })
     }
   } catch (error) {
     console.error(error);
@@ -309,30 +302,28 @@ exports.checksyncstatusfromDStoHS = async (req, res, next) => {
   }
 };
 
-exports.damLimitContact = (req,res,next) => {
-   let contactDetail = req.body.find((item) => item.Key == "contactid");
-    if(!rejectParallelCalls(contactDetail,req))
-    {
-      return res
+exports.damLimitContact = (req, res, next) => {
+  let contactDetail = req.body.find((item) => item.Key == "contactid");
+  if (!rejectParallelCalls(contactDetail, req)) {
+    return res
       .status(204)
       .send({
         success: false,
         error: "API call rejected due to Rate Limiting for User",
       });
-    }
-    next();
+  }
+  next();
 }
 
-exports.damLimitCompany = (req,res,next) => {
-    let companyDataValid = req.body.find((item) => item.Key == "accountid");
-    if(!rejectParallelCalls(companyDataValid,req))
-    {
-      return res
+exports.damLimitCompany = (req, res, next) => {
+  let companyDataValid = req.body.find((item) => item.Key == "accountid");
+  if (!rejectParallelCalls(companyDataValid, req)) {
+    return res
       .status(204)
       .send({
         success: false,
         error: "API call rejected due to Rate Limiting for User",
       });
-    }
-    next();
+  }
+  next();
 }

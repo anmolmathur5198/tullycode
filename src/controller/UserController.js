@@ -68,7 +68,7 @@ exports.registerUserController = async (req, res, next) => {
       await create_hubspot_user(newUser);
       logme({
         user,
-        from: "Myenergi",
+        from: "Trams",
         status: "Success",
         type: "User register successfully",
         message: `User register successfully`,
@@ -127,7 +127,7 @@ exports.loginUserController = async (req, res) => {
           if (!hoautk) {
             return res.redirect("/api/auth/hubspot");
           } else {
-              console.log({ tokenexpireation: "Token expired" });
+            console.log({ tokenexpireation: "Token expired" });
             if (tokens.isTokenExpired(hoautk)) {
               return res.send({
                 success: false,
@@ -169,7 +169,7 @@ exports.loginUserController = async (req, res) => {
           var mailOptions = {
             from: "testna11@24livehost.com",
             to: "deepakkumar.yadav@dotsquares.com",
-            bcc: "dharmendra.joshi@dotsquares.com",
+          //  bcc: "dharmendra.joshi@dotsquares.com",
             subject: `Error in ZOHO login Dashboard`,
             text: `${Message}`,
           };
@@ -188,31 +188,31 @@ exports.loginUserController = async (req, res) => {
       } else {
         const Message = "Please enter valid email";
         res.render('login', { error: Message });
-        let transporter = nodemailer.createTransport({
-          host: `mail.24livehost.com`,
-          pool: true,
-          port: 587,
-          tls: { rejectUnauthorized: false },
-          auth: {
-            user: 'testna11@24livehost.com',
-            pass: 'LQovkuOS7v'
-          }
-        });
-        var mailOptions = {
-          from: "testna11@24livehost.com",
-          to: "deepakkumar.yadav@dotsquares.com",
-          bcc: "dharmendra.joshi@dotsquares.com",
-          subject: `Error in Myenergi login Dashboard`,
-          text: `${Message}`,
-        };
-        console.log("mailOptions", mailOptions)
-        transporter.sendMail(mailOptions, function (error, info) {
-          if (error) {
-            console.log(error);
-          } else {
-            console.log('Email sent: ' + info.response);
-          }
-        });
+        // let transporter = nodemailer.createTransport({
+        //   host: `mail.24livehost.com`,
+        //   pool: true,
+        //   port: 587,
+        //   tls: { rejectUnauthorized: false },
+        //   auth: {
+        //     user: 'testna11@24livehost.com',
+        //     pass: 'LQovkuOS7v'
+        //   }
+        // });
+        // var mailOptions = {
+        //   from: "testna11@24livehost.com",
+        //   to: "deepakkumar.yadav@dotsquares.com",
+        // //  bcc: "dharmendra.joshi@dotsquares.com",
+        //   subject: `Error in Trams login Dashboard`,
+        //   text: `${Message}`,
+        // };
+        // console.log("mailOptions", mailOptions)
+        // transporter.sendMail(mailOptions, function (error, info) {
+        //   if (error) {
+        //     console.log(error);
+        //   } else {
+        //     console.log('Email sent: ' + info.response);
+        //   }
+        // });
         console.log("invalid email")
 
 
@@ -393,7 +393,7 @@ exports.forgotPassword = async (req, res) => {
 exports.appdashboard = async (req, res) => {
   try {
     let user = req.dsuser;
-    console.log("--",user)
+    console.log("--", user)
     let duser = await userregister.findOne({ _id: user._id }).lean();
 
     let users = await userregister.find().lean();
@@ -401,7 +401,7 @@ exports.appdashboard = async (req, res) => {
     let store = {
       hub_id: user.hub_id,
       dynamics_resourceURL: user.dynamicsresourceurl
-       ,
+      ,
       fullurl: user.dynamicsresourceurl,
       total_users: users.length,
       apps: 2,
@@ -482,7 +482,6 @@ exports.EmailSettings = async (req, res) => {
 
 exports.manageServices = async (req, res) => {
   console.log("ff")
-
   try {
     let user = req.dsuser;
 
@@ -500,7 +499,7 @@ exports.manageServices = async (req, res) => {
     if (update) {
       logme({
         user,
-        from: "MyEnergi",
+        from: "Trams",
         to: "HubSpot",
         status: "Success",
         type: "Company Syncing Services",
@@ -515,7 +514,7 @@ exports.manageServices = async (req, res) => {
     } else
       logme({
         user,
-        from: "MyEnergi",
+        from: "Trams",
         to: "HubSpot",
         status: "Error",
         type: "Login",
@@ -645,6 +644,9 @@ exports.serversidelogs = async (req, res) => {
     console.error(error.response);
   }
 };
+
+
+
 
 
 
