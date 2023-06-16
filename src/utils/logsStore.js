@@ -1,7 +1,7 @@
 const { logs } = require("../models");
 exports.logStore = async (logData) => {
   const { user, message, status, type, source, from, to } = logData;
-  console.log("Message  ", message);
+
   if (user && user.email) {
     if (user) {
       console.log("Message  ", message);

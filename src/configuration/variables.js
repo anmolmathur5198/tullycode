@@ -1,5 +1,4 @@
 module.exports = {
-
     // profileMappingfields : {
     //     "profileNo": 47848,
     //     "profileType_LinkCode": "I",

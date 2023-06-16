@@ -4,6 +4,7 @@
     "description": "**Edit a file, create a new file, and clone from Bitbucket in under 2 minutes**",
     "main": "server.js",
     "dependencies": {
+        "@hubspot/api-client": "^8.9.0",
         "ajax": "^0.0.4",
         "axios": "^0.21.1",
         "bcryptjs": "^2.4.3",

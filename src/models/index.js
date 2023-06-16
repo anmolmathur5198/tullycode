@@ -8,4 +8,5 @@ exports.logs = require("./logs");
 exports.zoho_accounts = require("./zoho_accounts");
 exports.zoho_products = require("./zoho_products");
 exports.TramsProfile = require("./tramProfiles");
+exports.HSContactRecord =require("./hsContactRecord")
 

@@ -1,15 +1,10 @@
 var CronJob = require("cron").CronJob;
 const croncontroller = require("../controller/croncontroller");
-
-const { userregister, TramsProfile } = require("../models");
-const later = require("later");
+const { userregister} = require("../models");
 const axios = require("axios");
-const moment = require("moment");
 const Tokens = require("../models/tokens")
-// 00 12 * * *
-// */5 * * * * // hs refresh token time 
+ 
 exports.runCron = () => {
-
   // cron code for refresh hubspot Token
   new CronJob("*/5 * * * *", async function () {
     let users = await userregister.find().lean();
@@ -30,7 +25,7 @@ exports.runCron = () => {
   }).start();
 
   // cron code for refresh trams session access token 
-  new CronJob("*/10 * * * * ", async () => {
+  new CronJob("*/7 * * * *", async () => {
     try {
       const body = {
         "username": process.env.USER_NAME,
@@ -50,7 +45,7 @@ exports.runCron = () => {
     }
   }).start();
 
-
+ 
   // nischay code for hubspot to trams
   // new CronJob("*/1 * * * *",  async function () {
   //   let users = await userregister.find().lean();
@@ -67,27 +62,30 @@ exports.runCron = () => {
   //   }
   // }).start();
 
-  // cron code that will download tech profile query into our mongodb from trams
-  // new CronJob("*/15 * * * * *", async function () {
-  //   let users = await userregister.find().lean();
-  //   if (users.length > 0) {
-  //     for (const user of users) {
-  //       let cron = new croncontroller(user);
-  //       cron.downloadTramsProfiles(user).then((result) => {
-  //         console.log(`Profile Run Query  Saving in DB Tram`)
-  //       });
-  //     }
-  //   }
-  // }).start();
+ 
+  // cron for download trams profile
+  new CronJob( "29 16 12 * *", async function () 
+  {
+    let users = await userregister.find().lean();
+    if (users.length > 0) {
+      for (const user of users) {
+        let cron = new croncontroller(user);
+        cron.downloadTramsProfiles(user).then((result) => {
+          console.log(`Profile Run Query  Saving in DB Tram`)
+        });
+      }
+    }
+  }).start();
 
-  // // // cron code that sync trams profile data into hubspot
-  // new CronJob("*/15 * * * * * ", async function () {
+
+  // code for syncing tram to hs (contact)
+  // new CronJob("*/20 * * * * *", async function () {
   //   let cron = new croncontroller();
   //   let users = await userregister.find().lean();
-  //   if (users.length > 0) {
+  //   if (users.length > 0){
   //     for (const user of users) {
-  //       cron.TramstoHScontact(user).then((results) => {
-  //         console.log("Result After Running Cron for Trams Profile Data add")
+  //       cron.tramstoHScontact(user).then((results) => {
+  //         console.log("Result After Running Cron for Trams Card Integration Flow");
   //       }).catch((error) => {
   //         console.log("Error Occured", error)
   //       })
@@ -95,6 +93,53 @@ exports.runCron = () => {
   //   }
   // }).start()
 
+  // // code for syncing tram to hs (card)
+  // new CronJob("*/20 * * * * *", async function () {
+  //   let cron = new croncontroller();
+  //   let users = await userregister.find().lean();
+  //   if (users.length > 0) {
+  //     for (const user of users) {
+  //       cron.createCard(user).then((results) => {
+  //         console.log("Result After Running Cron for Trams Card Integration Flow");
+  //       }).catch((error) => {
+  //         console.log("Error Occured", error)
+  //       })
+  //     }
+  //   }
+  // }).start()
+
+  // // code for syncing tram to hs (address)
+  // new CronJob("*/30 * * * * *", async function () {
+  //   let cron = new croncontroller();
+  //   let users = await userregister.find().lean();
+  //   if (users.length > 0) {
+  //     for (const user of users) {
+  //       cron.createAddress(user).then((results) => {
+  //         console.log("Result After Running Cron for Trams Card Integration Flow");
+  //       }).catch((error) => {
+  //         console.log("Error Occured", error)
+  //       })
+  //     }
+  //   }
+  // }).start()
+
+
+  // ---------------------------------------// HS to Trams Flow 
+
+    new CronJob("*/20 * * * * *", async function () {
+    let cron = new croncontroller();
+    let users = await userregister.find({}).lean();
+
+    if (users && users.length > 0) {
+      for (const user of users) {
+        cron.downloadHSContactNSyncToTrams(user).then((results) => {
+          console.log("Result After Running Cron for Trams Card Integration Flow");
+        }).catch((error) => {
+          console.log("Error Occured", error);
+        })
+      }
+    }
+  }).start()
 };
 
 

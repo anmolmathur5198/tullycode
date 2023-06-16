@@ -8,8 +8,17 @@ const TramsProfileSchema = new mongoose.Schema(
     },
     pending: {
       type: Boolean,
-      required: true,
+     
+    },
+    contactSyncingStatus: {
+      type: Boolean,
+  
+    },
+    cardsyncingstatus: {
+      type: Boolean,
+  
     }
+
   },
   { timestamps: true, versionKey: false }
 );
